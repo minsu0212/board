@@ -8,4 +8,6 @@ public interface EmployeeStore {
 
 	int registerEmployee(SqlSession sqlSession, Employee employee);
 
+	Employee loginEmployee(SqlSession sqlSession, Employee employee);
+
 }

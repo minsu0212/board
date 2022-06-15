@@ -2,7 +2,8 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-	<link rel="stylesheet" href="../../resources/css/employee.css">
+<%@ include file="/WEB-INF/views/include/inc_head.jsp" %>
+<link rel="stylesheet" href="../../resources/css/employee.css">
 	<body class="page--employee">
 		<form id="registerForm" class="shadow" action="/employee/register.eansoft" method="post" enctype="multipart/form-data"> 
 			<div class="subConts1">

@@ -21,5 +21,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		int result = eStore.registerEmployee(sqlSession, employee);
 		return result;
 	}
+
+	@Override
+	public Employee loginEmployee(Employee employee) {
+		Employee employeeOne = eStore.loginEmployee(sqlSession, employee);
+		return employeeOne;
+	}
 	
 }

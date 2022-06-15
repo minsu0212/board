@@ -1,0 +1,57 @@
+@charset "UTF-8";
+
+body,
+input,
+textarea,
+select {
+    font-size: 14px;
+    font-family: 'Noto Sans KR', 맑은 고딕, 돋움, malgun gothic, dotum, AppleGothic, Helvetica, sans-serif;
+    *word-break: break-all;
+    -ms-word-wrap: break-all;
+    white-space: normal;
+    word-break: break-all;
+    letter-spacing: -0.5px;
+}
+
+select,
+input,
+textarea {
+    outline: none;
+}
+
+input[type="text"],
+input[type="password"] {
+    padding: 0 10px;
+    height: 30px;
+    line-height: 28px;
+    border: 1px solid #ccc;
+}
+
+input {
+    font-size: 14px;
+}
+
+.mt-10 {
+    margin-top: 10px;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.t-c {
+    text-align: center;
+}
+
+button {
+    padding: 6px 10px;
+    font-size: 14px;
+    line-height: 1;
+    outline: none;
+}
+
+button.point {
+    background-color: #0b2a60;
+    border: 1px solid #0b2a60;
+    color: #fff;
+}

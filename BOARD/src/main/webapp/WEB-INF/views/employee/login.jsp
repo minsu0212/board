@@ -3,9 +3,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
+<%@ include file="/WEB-INF/views/include/inc_head.jsp" %>
+<link rel="stylesheet" href="../../resources/css/employee.css">
 <!-- 세션 있을 때(로그인되어 있는 상태일 경우), 홈으로 이동 -->
 <c:if test="${not empty sessionScope }">
-	<script>location.href="/home.hirp";</script>
+	<script>location.href="/home.eansoft";</script>
 </c:if>
 <body id="loginPage">
 	<form action="/employee/login.eansoft" method="post" enctype="multipart/form-data">

@@ -15,4 +15,10 @@ public class EmployeeStoreLogic implements EmployeeStore {
 		return result;
 	}
 
+	@Override
+	public Employee loginEmployee(SqlSession sqlSession, Employee employee) {
+		Employee employeeOne = sqlSession.selectOne("EmployeeMapper.loginEmployee", employee);
+		return employeeOne;
+	}
+
 }

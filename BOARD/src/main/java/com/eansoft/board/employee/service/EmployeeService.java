@@ -6,4 +6,6 @@ public interface EmployeeService {
 
 	int registerEmployee(Employee employee);
 
+	Employee loginEmployee(Employee employee);
+
 }
