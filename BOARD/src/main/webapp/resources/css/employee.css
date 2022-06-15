@@ -1,0 +1,212 @@
+@charset "UTF-8";
+
+p {
+    line-height: 1.6;
+}
+
+#loginPage {
+    background: url("../images/bg_login.png") no-repeat center 0/100% auto;
+}
+
+#loginPage form {
+    width: 364px;
+    box-sizing: border-box;
+    height: 643px;
+    padding: 0 40px;
+    padding-top: 396px;
+    background: url("../images/bg_login_card.png") no-repeat;
+    margin: 0 auto;
+}
+
+#loginPage form label:first-child {
+    display: block;
+    margin-bottom: 6px;
+}
+
+#loginPage form input[type="text"],
+#loginPage form input[type="password"] {
+    width: 100%;
+    height: 36px;
+    padding-left: 48px;
+}
+
+#loginPage form input[type="text"] {
+    background: #f4f4f4 url("../images/icons/icon_login_01.png") no-repeat left center;
+}
+
+#loginPage form input[type="password"] {
+    background: #f4f4f4 url("../images/icons/icon_login_02.png") no-repeat left center;
+}
+
+#loginPage form button {
+    width: 100%;
+    height: 36px;
+}
+
+#loginPage .p--foot {
+    margin-top: 24px;
+    color: #4e615f;
+    opacity: 0.7;
+    line-height: 1.6;
+}
+
+#loginPage .p--foot small {
+    font-size: 12px;
+}
+
+.page--employee {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #eef1f6;
+}
+
+.page--employee h1 {
+    margin-bottom: 30px;
+    font-size: 26px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.page--employee h1+p {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.page--employee form {
+    width: 90%;
+    max-width: 420px;
+    padding: 40px 26px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background: #fff;
+}
+
+.page--employee form>div {
+    margin-bottom: 20px;
+}
+
+.page--employee form>div>label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.page--employee form>div>input[type="radio"]+label {
+    display: inline;
+    margin-right: 10px;
+}
+
+.page--employee form input[type="text"],
+.page--employee form input[type="password"],
+.page--employee form input[type="date"] {
+    width: 100%;
+    height: 40px;
+    background-color: #f9f9f9;
+}
+
+.page--employee button[type="submit"] {
+    width: 100%;
+    padding: 14px 10px;
+    font-size: 16px;
+}
+
+.mypage-prev #mypage {
+    padding-bottom: 100px;
+}
+
+.mypage-prev form {
+    padding: 40px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.mypage-prev p {
+    font-weight: 300;
+    font-size: 20px;
+}
+
+.mypage-prev p strong {
+    font-weight: 500;
+}
+
+.mypage-prev input[type="password"] {
+    height: 40px;
+    padding: 0 20px;
+    font-size: 16px;
+}
+
+.mypage-prev button[type="submit"] {
+    width: 50%;
+    max-width: 100px;
+    margin-top: 40px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.mypage-update li:not(:last-child) {
+    margin-bottom: 20px;
+}
+
+.mypage-update li label {
+    display: inline-block;
+    width: 140px;
+}
+
+.mypage-update li input:read-only {
+    border: none;
+}
+
+.mypage-update li input:not(:read-only) {
+    background: aliceblue;
+    border-color: aliceblue;
+}
+
+.mypage-update .profile-wrap {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    width: 100px;
+    height: 100px;
+    border: 1px solid #efefef;
+}
+
+.mypage-update .profile-wrap>button {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, .3);
+    border: none;
+    color: #fff;
+    font-size: 12px;
+    transition: background .3s;
+}
+
+.mypage-update .profile-wrap>button:hover {
+    background: rgba(0, 0, 0, .5);
+}
+
+.mypage-update .profile-wrap img {
+    width: 100%;
+    height: 100%;
+}
+
+.mypage-update .section--modal p {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-weight: 300;
+    font-size: 16px;
+}
+
+.mypage-update .section--modal input[type="text"],
+.mypage-update .section--modal input[type="password"] {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 10px auto 0;
+    background: #fff;
+    border: 1px solid #ddd;
+}
