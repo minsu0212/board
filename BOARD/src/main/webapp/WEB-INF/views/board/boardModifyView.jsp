@@ -4,7 +4,7 @@
 <html>
 <%@ include file="/WEB-INF/views/include/inc_head.jsp" %>
 <body>
-	<h1>게시글 수정</h1>
+	<h1>게시글 수정ㅇㅅㅇ</h1>
 	
 	<table class="table--basic">
 		<colgroup>
