@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="EmployeeMapper">
-	<resultMap type="com.eansoft.board.employee.domain.Employee" id="employeeResultMap"> <!-- 필요한 값만 적으면 됨 -->
+	<resultMap type="Employee" id="employeeResultMap">
 		<id property="emplId" column="EMPL_ID" />
 		<result property="emplPw" column="EMPL_PW" />
 		<result property="emplName" column="EMPL_NAME" />
@@ -13,4 +13,8 @@
 	<insert id="registerEmployee" parameterType="Employee">
 		INSERT INTO EMPL_TBL VALUES(#{emplId}, #{emplPw}, #{emplName})
 	</insert>
+	
+	<select id="loginEmployee" parameterType="Employee" resultMap="employeeResultMap">
+		SELECT * FROM EMPL_TBL WHERE EMPL_ID = #{emplId} AND EMPL_PW = #{emplPw}
+	</select>
 </mapper>

@@ -9,9 +9,14 @@
 	</settings>
 	<typeAliases>
 		<typeAlias type="com.eansoft.board.employee.domain.Employee" alias="Employee"></typeAlias>
+		<typeAlias type="com.eansoft.board.board.domain.Board" alias="Board"></typeAlias>
+		<typeAlias type="com.eansoft.board.board.domain.BoardFile" alias="BoardFile"></typeAlias>
+		<typeAlias type="com.eansoft.board.board.domain.BoardType" alias="BoardType"></typeAlias>
+		<typeAlias type="com.eansoft.board.board.domain.Reply" alias="Reply"></typeAlias>
 	</typeAliases>
 	
 	<mappers>
 		<mapper resource="mappers/employee-mapper.xml" />
+		<mapper resource="mappers/board-mapper.xml" />
 	</mappers>
 </configuration>
