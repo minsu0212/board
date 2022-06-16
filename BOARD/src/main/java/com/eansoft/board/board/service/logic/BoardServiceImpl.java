@@ -44,4 +44,21 @@ public class BoardServiceImpl implements BoardService {
 		return bList;
 	}
 
+	@Override
+	public Board printOneByNo(int boardNo) {
+		Board board = bStore.selectOneByNo(sqlSession, boardNo);
+		return board;
+	}
+
+	@Override
+	public int deleteBoard(int boardNo) {
+		int result = bStore.deleteBoard(sqlSession, boardNo);
+		return result;
+	}
+
+	@Override
+	public void updateCount(int boardNo) {
+		bStore.updateCount(sqlSession, boardNo);
+	}
+
 }

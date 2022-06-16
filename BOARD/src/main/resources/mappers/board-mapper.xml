@@ -32,12 +32,17 @@
 		<result property="replyWriteDate" column="REPLY_WRITE_DATE" />
 	</resultMap>
 	
-	<select id="selectBoardCount">
-	
+	<select id="selectBoardCount" resultType="_int">
+		SELECT COUNT(*) FROM BOARD_TBL
 	</select>
 	
-	<select id="selectBoard">
-		
+	<select id="selectBoard" resultMap="boardResultMap">
+		SELECT * FROM BOARD_TBL
+		ORDER BY BOARD_NO DESC
+	</select>
+	
+	<select id="selectOneByNo" resultMap="boardResultMap">
+		SELECT * FROM BOARD_TBL WHERE BOARD_NO = #{boardNo}
 	</select>
 	
 	<insert id="boardRegister" parameterType="Board">
@@ -51,4 +56,12 @@
 		BOARD_FILE_TBL
 		VALUES(FILE_NO_SEQ.NEXTVAL, BOARD_NO_SEQ.CURRVAL, #{fileName}, #{fileExtension}, #{fileRename}, #{filePath}, #{emplId})
 	</insert>
+	
+	<update id="updateCount">
+		UPDATE BOARD_TBL SET BOARD_COUNT = BOARD_COUNT + 1 WHERE BOARD_NO = #{boardNo}
+	</update>
+	
+	<delete id="deleteBoard">
+		DELETE FROM BOARD_TBL WHERE BOARD_NO = #{boardNo}
+	</delete>
 </mapper>

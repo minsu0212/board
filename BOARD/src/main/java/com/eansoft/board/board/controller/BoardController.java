@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -65,7 +66,7 @@ public class BoardController {
 			}
 			result = bService.saveFile(boardFile);
 			if(result > 0) {
-				mv.setViewName("home");
+				mv.setViewName("redirect:/board/list.eansoft");
 			}else {
 				mv.addObject("msg", "게시글 등록에 실패하였습니다.");
 				mv.setViewName("common/errorPage");
@@ -102,7 +103,7 @@ public class BoardController {
 	}
 	
 	// 게시글 조회
-	@RequestMapping(value="/home", method=RequestMethod.GET)
+	@RequestMapping(value="/board/list.eansoft", method=RequestMethod.GET)
 	public ModelAndView selectBoardList(ModelAndView mv
 			, @ModelAttribute Board board
 			, @RequestParam(value="page", required=false) Integer page
@@ -117,11 +118,55 @@ public class BoardController {
 			List<Board> bList = bService.printBoard(board, pi);
 			mv.addObject("bList", bList);
 			mv.addObject("pi", pi);
-			mv.setViewName("home");
+			mv.setViewName("board/boardList");
 		}catch(Exception e) {
 			mv.addObject("msg", e.toString());
 			mv.setViewName("common/errorPage");
 		}
+		return mv;
+	}
+	
+	// 게시글 상세보기
+	@RequestMapping(value="/board/detail.eansoft", method=RequestMethod.GET)
+	public ModelAndView boardDetailView(ModelAndView mv
+			, @RequestParam("boardNo") int boardNo) {
+		try {
+			bService.updateCount(boardNo);
+			Board board = bService.printOneByNo(boardNo);
+			if(board != null) {
+				mv.addObject("board", board);
+				mv.setViewName("board/boardDetailView");
+			}else {
+				mv.addObject("msg", "게시글 상세조회 실패");
+				mv.setViewName("common/errorPage");
+			}
+		}catch(Exception e) {
+			mv.addObject("msg", e.toString());
+			mv.setViewName("common/errorPage");
+		}
+		return mv;
+	}
+	
+	// 게시글 삭제
+	@ResponseBody
+	@RequestMapping(value="/board/deleteBoard.eansoft", method=RequestMethod.GET)
+	public String deleteBoard(@RequestParam("boardNo") int boardNo) {
+		try {
+			int result = bService.deleteBoard(boardNo);
+			if(result > 0) {
+				return "success";
+			}else {
+				return "fail";
+			}
+		}catch(Exception e) {
+			return e.toString();
+		}
+	}
+	
+	// 게시글 수정 화면
+	@RequestMapping(value="/board/modify.eansoft", method=RequestMethod.GET)
+	public ModelAndView boardModify(ModelAndView mv) {
+		mv.setViewName("board/boardModifyView");
 		return mv;
 	}
 	

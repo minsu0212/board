@@ -4,8 +4,10 @@
 <html>
 <%@ include file="/WEB-INF/views/include/inc_head.jsp" %>
 <body>
+	<h1>게시글 작성</h1>
+
 	<form action="/board/register.eansoft" method="post">
-		<table>
+		<table class="table--basic">
 			<tr>
 				<td>글 종류</td>
 				<td>
@@ -29,7 +31,7 @@
 				<td><textarea name="boardContents"></textarea></td>
 			</tr>
 		</table>
-		<button type="submit">등록</button>
+		<button class="basic" type="submit">등록</button>
 	</form>
 </body>
 </html>

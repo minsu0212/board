@@ -16,4 +16,10 @@ public interface BoardService {
 	
 	List<Board> printBoard(Board board, PageInfo pi);
 
+	Board printOneByNo(int boardNo);
+
+	int deleteBoard(int boardNo);
+
+	void updateCount(int boardNo);
+
 }

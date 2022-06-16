@@ -42,4 +42,21 @@ public class BoardStoreLogic implements BoardStore {
 		return bList;
 	}
 
+	@Override
+	public Board selectOneByNo(SqlSession sqlSession, int boardNo) {
+		Board board = sqlSession.selectOne("BoardMapper.selectOneByNo", boardNo);
+		return board;
+	}
+
+	@Override
+	public int deleteBoard(SqlSession sqlSession, int boardNo) {
+		int result = sqlSession.delete("BoardMapper.deleteBoard", boardNo);
+		return result;
+	}
+
+	@Override
+	public void updateCount(SqlSession sqlSession, int boardNo) {
+		sqlSession.update("BoardMapper.updateCount", boardNo);
+	}
+
 }

@@ -18,4 +18,10 @@ public interface BoardStore {
 
 	List<Board> selectBoard(SqlSession sqlSession, Board board, PageInfo pi);
 
+	Board selectOneByNo(SqlSession sqlSession, int boardNo);
+
+	int deleteBoard(SqlSession sqlSession, int boardNo);
+
+	void updateCount(SqlSession sqlSession, int boardNo);
+
 }

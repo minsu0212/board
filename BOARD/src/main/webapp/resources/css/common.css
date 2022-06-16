@@ -31,6 +31,40 @@ input {
     font-size: 14px;
 }
 
+input[type="date"],
+input[type="datetime-local"],
+select {
+    width: 160px;
+    padding: 0 10px;
+    height: 30px;
+    line-height: 28px;
+    border: 1px solid #ccc;
+    color: #333;
+}
+
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: url("../images/bg_select_arrow.png") no-repeat 90% center/10px auto;
+}
+
+select::-ms-expand {
+    display: none;
+    /* for IE10, 11*/
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    line-height: 1.6;
+    border: 1px solid #ccc;
+}
+
+input[type="text"]::placeholder {
+    color: #999;
+}
+
 .mt-10 {
     margin-top: 10px;
 }
@@ -50,8 +84,74 @@ button {
     outline: none;
 }
 
+button.basic {
+    background-color: #fff;
+    border: 1px solid #333;
+    color: #333;
+}
+
 button.point {
     background-color: #0b2a60;
     border: 1px solid #0b2a60;
+    color: #fff;
+}
+
+button.prev {
+    content: "\f104";
+    background-color: white;
+    font-family: fontawesome;
+}
+
+button.next {
+    content: "\f105";
+    background-color: white;
+    font-family: fontawesome;
+}
+
+.table--basic {
+    width: 100%;
+    border-top: 1px solid #ccc;
+}
+
+.table--basic th,
+.table--basic td {
+    vertical-align: middle;
+    border-collapse: collapse;
+    border-bottom: 1px solid #ccc;
+}
+
+.table--basic th {
+    padding: 14px 20px;
+    text-align: left;
+    font-weight: 500;
+}
+
+.table--basic td {
+    padding: 16px 20px;
+}
+
+@media screen and (min-width: 1201px) {
+    .table--basic tbody tr:hover>* {
+        background-color: #f4f4f4;
+    }
+}
+
+.btns--paging {
+    margin: 60px auto 40px;
+    text-align: center;
+}
+
+.btns--paging a {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    line-height: 22px;
+    margin: 0;
+}
+
+.btns--paging a.on {
+    margin: 0 2px;
+    background-color: #00498c;
+    border-radius: 50%;
     color: #fff;
 }
