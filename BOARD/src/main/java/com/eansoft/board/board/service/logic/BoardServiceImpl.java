@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.eansoft.board.board.domain.Board;
 import com.eansoft.board.board.domain.BoardFile;
+import com.eansoft.board.board.domain.Reply;
 import com.eansoft.board.board.service.BoardService;
 import com.eansoft.board.board.store.BoardStore;
 import com.eansoft.board.common.PageInfo;
+import com.eansoft.board.common.Search;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -59,6 +61,24 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public void updateCount(int boardNo) {
 		bStore.updateCount(sqlSession, boardNo);
+	}
+
+	@Override
+	public List<Board> searchBoard(Search search) {
+		List<Board> bList = bStore.searchBoard(sqlSession, search);
+		return bList;
+	}
+
+	@Override
+	public List<Reply> printAllReply(Reply reply) {
+		List<Reply> rList = bStore.selectAllReply(sqlSession, reply);
+		return rList;
+	}
+
+	@Override
+	public int registerReply(Reply reply) {
+		int result = bStore.insertReply(sqlSession, reply);
+		return result;
 	}
 
 }

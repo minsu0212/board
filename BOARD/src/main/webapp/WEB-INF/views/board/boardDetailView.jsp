@@ -48,7 +48,106 @@
 			<td colspan="2">${board.boardContents }</td>
 		</tr>
 	</table>
+	<div id="reply-div">
+		<div>
+			<span>${sessionScope.emplName }</span>
+			<textarea id="rContents" maxlength="500" placeholder="댓글을 입력해 주세요."></textarea>
+		</div>
+		<div><button id="rSubmit">댓글 작성</button></div>
+	</div>
+	<table class="reply-table" id="rtb">
+		<thead>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
 	<script>
+		getReplyList();
+	
+		$("#rSubmit").on("click", function() {
+			var boardNo = "${board.boardNo}";
+			var replyContents = $("#rContents").val();
+			$.ajax({
+				url : "/board/replyAdd.eansoft",
+				type : "post",
+				data : { "boardNo" : boardNo,
+						 "replyContents" : replyContents },
+				success : function(data) {
+					if(data == "success") {
+						alert("댓글 등록 성공");
+						$("#reply-div textarea").val("");
+						getReplyList();
+					}else {
+						alert("댓글 등록 실패");
+					}
+				},
+				error : function() {
+					alert("ajax 실패!");
+				}
+			});
+		});
+		
+		function getReplyList() {
+			var boardNo = "${board.boardNo}";
+			$.ajax({
+				url : "/board/replyList.eansoft",
+				type : "get",
+				data : { "boardNo" : boardNo },
+				dataType : "json",
+				success : function(data) {
+					var count = data.length;
+					var $tableBody = $("rtb tbody");
+					$tableBody.html("");
+					var $trCount = $("<tr>");
+					
+					$tableBody.append($trCount);
+					for(var i = 0; i < data.length; i++) {
+						var $tr = $("<tr>");
+						var $br = $("<br>");
+						var $rWriter 	 = $("<td width='160'><b>").text(data[i].emplId).append("</b>");
+						var $reWriter 	 = $("<td width='160' id='reWriter'><img src='../../../../resources/images/icons/rereply.png' style='width:20px; height:auto; vertical-align: middle; align :right;'/><b>"+data[i].emplId+"</b>");
+						var $rContent 	 = $("<td width='250' colspan='2' class='rContent'>").text(data[i].replyContents);
+						var $reContent 	 = $("<td width='250' colspan='2' class='rContent' >").text(data[i].replyContents);
+						var $rCreateDate = $("<td class='t-c' width='120'>").text(data[i].writeDate);
+						var $btnArea 	 = $("<td class='t-c' width='100'>")
+											.append("<a href='javascript:void(0)' onclick='modReplyView(this, "+data[i].replyNo+", \""+data[i].replyContents+"\");'>수정</a> ")
+											.append("<a href='javascript:void(0)' onclick='removeReply("+data[i].replyNo+");'>삭제</a>")
+
+							
+						var $btnReReply	 = $("<td class='t-c' width='100'>").append("<a href='javascript:void(0)' onclick='ReReplyWriteView(this, "+data[i].replyNo+", \""+data[i].replyContents+"\");'>답글</a>");
+						
+						if(data[i].replyOrder == 0){
+							$tr.append($rWriter);
+							$tr.append($rContent);
+							$tr.append($rCreateDate);
+							$tr.append($btnArea);
+							$tr.append($btnReReply);
+							$tableBody.append($tr);
+						}else{
+							$tr.append($reWriter);
+							$tr.append($reContent);
+							$tr.append($rCreateDate);
+							$tr.append($btnArea);
+							$tr.append("<td></td>");
+							$tableBody.append($tr);
+						}
+					}
+				},
+				error : function() {
+					var $tableBody = $("#rtb tbody");
+					$tableBody.html(""); 
+					var $trCount = $("<tr>");
+					var $trMsg = $("<tr>");
+					var $tdCount = $("<td colspan='4'>").html("<b>댓글 (0)</b>");
+					var $tdMsg = $("<td colspan='4'>").text("댓글이 없습니다.");
+					$trCount.append($tdCount);
+					$trMsg.append($tdMsg);
+					$tableBody.append($trCount);
+					$tableBody.append($trMsg);
+				}
+			});
+		}
+		
 		function historyBack() {
 			window.location = document.referrer;
 		}

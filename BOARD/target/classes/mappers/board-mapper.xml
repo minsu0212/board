@@ -12,6 +12,8 @@
 		<result property="boardContents" column="BOARD_CONTENTS" />
 		<result property="boardWriteDate" column="BOARD_WRITE_DATE" />
 		<result property="boardCount" column="BOARD_COUNT" />
+		<result property="boardFileCount" column="BOARD_FILE_COUNT" />
+		<collection property="fList" column="BOARD_NO" javaType="java.util.ArrayList" ofType="BoardFile" select="selectBoardFiles"></collection>
 	</resultMap>
 	
 	<resultMap type="BoardFile" id="boardFileResultMap">
@@ -24,7 +26,7 @@
 		<result property="emplId" column="EMPL_ID" />
 	</resultMap>
 	
-	<resultMap type="Reply" id="ReplyResultMap">
+	<resultMap type="Reply" id="replyResultMap">
 		<id property="replyNo" column="REPLY_NO" />
 		<result property="boardNo" column="BOARD_NO" />
 		<result property="emplId" column="EMPL_ID" />
@@ -37,13 +39,44 @@
 	</select>
 	
 	<select id="selectBoard" resultMap="boardResultMap">
-		SELECT * FROM BOARD_TBL
-		ORDER BY BOARD_NO DESC
+		SELECT * FROM BOARD_TBL ORDER BY BOARD_NO DESC
+<!-- 		SELECT B.BOARD_NO, B.EMPL_ID, B.BOARD_TYPE, BOARD_TITLE, BOARD_CONTENTS, BOARD_WRITE_DATE, BOARD_COUNT, D.BOARD_WRITE_TYPE, NVL(CNT,0) AS BOARD_FILE_COUNT -->
+<!-- 	    FROM BOARD_TBL B JOIN BOARD_TYPE_TBL D ON(B.BOARD_TYPE = D.BOARD_WRITE_TYPE) -->
+<!-- 	    LEFT OUTER JOIN (SELECT F.BOARD_NO, COUNT(FILE_NO) AS CNT FROM BOARD_FILE_TBL F GROUP BY F.BOARD_NO) C -->
+<!-- 	    ON(B.BOARD_NO = C.BOARD_NO) -->
+<!-- 	    ORDER BY BOARD_NO DESC -->
 	</select>
 	
 	<select id="selectOneByNo" resultMap="boardResultMap">
 		SELECT * FROM BOARD_TBL WHERE BOARD_NO = #{boardNo}
 	</select>
+	
+	<select id="selectBoardFiles" resultMap="boardFileResultMap">
+		SELECT * FROM BOARD_FILE_TBL WHERE BOARD_NO = #{boardNo}
+	</select>
+	
+	<select id="searchBoard" resultMap="boardResultMap">
+		SELECT * FROM BOARD_TBL WHERE
+		<if test="searchCondition.toString() =='title'">
+  			BOARD_TITLE LIKE '%' || #{searchValue} || '%'
+  		</if>
+		<if test="searchCondition.toString() =='contents'">
+  			BOARD_CONTENTS LIKE '%' || #{searchValue} || '%'
+  		</if>
+		<if test="searchCondition.toString() =='writer'">
+  			EMPL_ID LIKE '%' || #{searchValue} || '%'
+  		</if>
+	</select>
+	
+	<select id="selectAllReply" resultMap="replyResultMap">
+		SELECT * FROM REPLY_TBL WHERE BOARD_NO = #{boardNo}
+	</select>
+	
+	<insert id="insertReply" parameterType="Reply">
+		INSERT INTO
+		REPLY_TBL
+		(REPLY_NO_SEQ.NEXTVAL, #{boardNo}, #{emplId}, #{replyContents}, DEFAULT)
+	</insert>
 	
 	<insert id="boardRegister" parameterType="Board">
 		INSERT INTO

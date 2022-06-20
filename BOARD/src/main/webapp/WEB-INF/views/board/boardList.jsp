@@ -6,6 +6,16 @@
 <body>
 	<h1>게시판</h1>
 	
+	<form class="form--srch" action="/board/searchBoard.eansoft" method="get">
+		<select name="searchCondition">
+			<option value="title">제목</option>
+			<option value="contents">내용</option>
+			<option value="writer">글쓴이</option>
+		</select>
+            <input type="text" name="searchValue" placeholder="검색">
+            <button type="submit"></button>
+        </form>
+	
 	<table class="table--basic">
 		<colgroup>
 			<col style="width:8%;">
@@ -48,18 +58,31 @@
 	<button class="basic" type="button" onclick="location.href='/board/write.eansoft'">게시글 등록</button>
 	
 	<div class="btns--paging">
-		<c:if test="${pi.currentPage > '1' }">
-			<button class="fa-solid fa-angle-left prev" onclick="location.href='/board/list.eansoft?page=${pi.currentPage-1 }'"></button>
-		</c:if>
+		<button class="fa-solid fa-angles-left first"
+		<c:if test="${pi.currentPage > '1' }"> onclick="location.href='/board/list.eansoft?page=${pi.startNavi }'"</c:if>></button>
+		<button class="fa-solid fa-angle-left prev"
+		<c:if test="${pi.currentPage > '1' }"> onclick="location.href='/board/list.eansoft?page=${pi.currentPage-1 }'"</c:if>></button>
 		<c:forEach var="p" begin="${pi.startNavi }" end="${pi.endNavi }">
 			<c:url var="pagination" value="/board/list.eansoft">
 				<c:param name="page" value="${p }"></c:param>
 			</c:url>
 			&nbsp;<a href="${pagination }">${p }</a>&nbsp;
 		</c:forEach>
-		<c:if test="${pi.currentPage < pi.endNavi }">
-			<button class="fa-solid fa-angle-right next" onclick="location.href='/board/list.eansoft?page=${pi.currentPage+1 }'"></button>
-		</c:if>
+		<button class="fa-solid fa-angle-right next"
+		<c:if test="${pi.currentPage < pi.endNavi }">onclick="location.href='/board/list.eansoft?page=${pi.currentPage+1 }'"</c:if>></button>
+		<button class="fa-solid fa-angles-right last"
+		<c:if test="${pi.currentPage < pi.endNavi }">onclick="location.href='/board/list.eansoft?page=${pi.endNavi }'"</c:if>></button>
 	</div>
+	<script>
+		// 현재 페이지 하이라이팅
+		$(function () {
+		    var pageNo = new URLSearchParams(location.search).get("page");
+		    if (pageNo != null) {
+		        $(".btns--paging a:nth-of-type(" + pageNo + ")").addClass("on");
+		    } else {
+		        $(".btns--paging a:nth-of-type(1)").addClass("on");
+		    }
+		});
+	</script>
 </body>
 </html>

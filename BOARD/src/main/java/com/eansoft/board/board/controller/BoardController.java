@@ -1,12 +1,14 @@
 package com.eansoft.board.board.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +23,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.eansoft.board.board.domain.Board;
 import com.eansoft.board.board.domain.BoardFile;
+import com.eansoft.board.board.domain.Reply;
 import com.eansoft.board.board.service.BoardService;
 import com.eansoft.board.common.PageInfo;
 import com.eansoft.board.common.Pagination;
+import com.eansoft.board.common.Search;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonIOException;
 
 @Controller
 public class BoardController {
@@ -63,8 +70,8 @@ public class BoardController {
 					boardFile.setFileRename(fileRename);
 					boardFile.setFilePath(filePath);
 				}
+				result = bService.saveFile(boardFile);
 			}
-			result = bService.saveFile(boardFile);
 			if(result > 0) {
 				mv.setViewName("redirect:/board/list.eansoft");
 			}else {
@@ -168,6 +175,58 @@ public class BoardController {
 	public ModelAndView boardModify(ModelAndView mv) {
 		mv.setViewName("board/boardModifyView");
 		return mv;
+	}
+	
+	// 게시글 검색
+	@RequestMapping(value="/board/searchBoard.eansoft", method=RequestMethod.GET)
+	public ModelAndView boardSearchList(ModelAndView mv
+			, @ModelAttribute Search search) {
+		try {
+			List<Board> bList = bService.searchBoard(search);
+			if(!bList.isEmpty()) {
+				mv.addObject("bList", bList);
+				mv.setViewName("board/boardList");
+			}else {
+				mv.addObject("msg", "검색조회 실패");
+				mv.setViewName("common/errorPage");
+			}
+		}catch(Exception e) {
+			mv.addObject("msg", e.toString());
+			mv.setViewName("common/errorPage");
+		}
+		return mv;
+	}
+	
+	// 게시글 댓글 조회
+	@ResponseBody
+	@RequestMapping(value="/board/replyList.eansoft", method=RequestMethod.GET)
+	public void boardReplyView(@ModelAttribute Reply reply
+			, HttpServletResponse response) throws JsonIOException, IOException {
+		List<Reply> nReplyList = bService.printAllReply(reply);
+		if(!nReplyList.isEmpty()) {
+			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			gson.toJson(nReplyList, response.getWriter());
+		}
+	}
+	
+	// 게시글에 댓글 등록
+	@ResponseBody
+	@RequestMapping(value="/board/replyAdd.eansoft", method=RequestMethod.POST)
+	public String registerReply(@RequestParam("boardNo") int boardNo
+			, @RequestParam("replyContents") String replyContents
+			, HttpServletRequest request) {
+		Reply reply = new Reply();
+		HttpSession session = request.getSession();
+		String emplId = (String) session.getAttribute("emplId");
+		reply.setBoardNo(boardNo);
+		reply.setEmplId(emplId);
+		reply.setReplyContents(replyContents);
+		int result = bService.registerReply(reply);
+		if (result > 0) {
+			return "success";
+		}else {
+			return "fail";
+		}
 	}
 	
 }

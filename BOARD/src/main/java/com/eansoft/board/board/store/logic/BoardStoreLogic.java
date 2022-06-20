@@ -8,8 +8,10 @@ import org.springframework.stereotype.Repository;
 
 import com.eansoft.board.board.domain.Board;
 import com.eansoft.board.board.domain.BoardFile;
+import com.eansoft.board.board.domain.Reply;
 import com.eansoft.board.board.store.BoardStore;
 import com.eansoft.board.common.PageInfo;
+import com.eansoft.board.common.Search;
 
 @Repository
 public class BoardStoreLogic implements BoardStore {
@@ -57,6 +59,24 @@ public class BoardStoreLogic implements BoardStore {
 	@Override
 	public void updateCount(SqlSession sqlSession, int boardNo) {
 		sqlSession.update("BoardMapper.updateCount", boardNo);
+	}
+
+	@Override
+	public List<Board> searchBoard(SqlSession sqlSession, Search search) {
+		List<Board> bList = sqlSession.selectList("BoardMapper.searchBoard", search);
+		return bList;
+	}
+
+	@Override
+	public List<Reply> selectAllReply(SqlSession sqlSession, Reply reply) {
+		List<Reply> rList = sqlSession.selectList("BoardMapper.selectAllReply", reply);
+		return rList;
+	}
+
+	@Override
+	public int insertReply(SqlSession sqlSession, Reply reply) {
+		int result = sqlSession.insert("BoardMapper.insertReply", reply);
+		return result;
 	}
 
 }

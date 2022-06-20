@@ -100,12 +100,34 @@ button.prev {
     content: "\f104";
     background-color: white;
     font-family: fontawesome;
+    border: none;
 }
 
 button.next {
-    content: "\f105";
+    content: "\f101";
     background-color: white;
     font-family: fontawesome;
+    border: none;
+}
+
+button.first {
+	content: "\f100";
+    background-color: white;
+    font-family: fontawesome;
+    border: none;
+}
+
+button.last {
+	content: "\f105";
+    background-color: white;
+    font-family: fontawesome;
+    border: none;
+}
+
+@media screen and (min-width: 1201px) {
+    a:hover {
+        color: #00498c;
+    }
 }
 
 .table--basic {
@@ -154,4 +176,50 @@ button.next {
     background-color: #00498c;
     border-radius: 50%;
     color: #fff;
+}
+
+.form--srch {
+    position: absolute;
+    top: 15px;
+    right: 210px;
+    display: flex;
+    align-items: center;
+}
+
+.form--srch input {
+    width: 140px;
+    border: 1px solid #ddd;
+    height: 32px;
+    padding-left: 10px;
+    padding-right: 32px;
+    font-size: 13px;
+    background: none;
+}
+
+@media screen and (min-width: 1201px) {
+    .form--srch:hover input {
+        border-color: #00a1b9;
+    }
+}
+
+.form--srch select {
+    width: 90px;
+    height: 32px;
+    font-size: 13px;
+    margin-right: 4px;
+}
+
+.form--srch input::placeholder {
+    color: #999;
+}
+
+.form--srch button[type=submit] {
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    display: block;
+    background: url(../images/icons/ic_gnb.png) no-repeat -483px -661px;
+    width: 27px;
+    height: 27px;
+    border: none;
 }

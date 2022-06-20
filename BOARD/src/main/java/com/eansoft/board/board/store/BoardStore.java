@@ -6,7 +6,9 @@ import org.apache.ibatis.session.SqlSession;
 
 import com.eansoft.board.board.domain.Board;
 import com.eansoft.board.board.domain.BoardFile;
+import com.eansoft.board.board.domain.Reply;
 import com.eansoft.board.common.PageInfo;
+import com.eansoft.board.common.Search;
 
 public interface BoardStore {
 
@@ -23,5 +25,11 @@ public interface BoardStore {
 	int deleteBoard(SqlSession sqlSession, int boardNo);
 
 	void updateCount(SqlSession sqlSession, int boardNo);
+
+	List<Board> searchBoard(SqlSession sqlSession, Search search);
+
+	List<Reply> selectAllReply(SqlSession sqlSession, Reply reply);
+
+	int insertReply(SqlSession sqlSession, Reply reply);
 
 }
