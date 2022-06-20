@@ -11,12 +11,13 @@ public class Board {
 	private String boardWriteDate;
 	private int boardCount;
 	private int boardFileCount;
+	private String boardWriteType;
 	private List<BoardFile> fList; // 게시글 첨부파일
 	
 	public Board() {}
 
 	public Board(int boardNo, String emplId, String boardType, String boardTitle, String boardContents,
-			String boardWriteDate, int boardCount, int boardFileCount, List<BoardFile> fList) {
+			String boardWriteDate, int boardCount, int boardFileCount, String boardWriteType, List<BoardFile> fList) {
 		super();
 		this.boardNo = boardNo;
 		this.emplId = emplId;
@@ -26,6 +27,7 @@ public class Board {
 		this.boardWriteDate = boardWriteDate;
 		this.boardCount = boardCount;
 		this.boardFileCount = boardFileCount;
+		this.boardWriteType = boardWriteType;
 		this.fList = fList;
 	}
 
@@ -93,6 +95,14 @@ public class Board {
 		this.boardFileCount = boardFileCount;
 	}
 
+	public String getBoardWriteType() {
+		return boardWriteType;
+	}
+
+	public void setBoardWriteType(String boardWriteType) {
+		this.boardWriteType = boardWriteType;
+	}
+
 	public List<BoardFile> getfList() {
 		return fList;
 	}
@@ -105,7 +115,8 @@ public class Board {
 	public String toString() {
 		return "Board [boardNo=" + boardNo + ", emplId=" + emplId + ", boardType=" + boardType + ", boardTitle="
 				+ boardTitle + ", boardContents=" + boardContents + ", boardWriteDate=" + boardWriteDate
-				+ ", boardCount=" + boardCount + ", boardFileCount=" + boardFileCount + ", fList=" + fList + "]";
+				+ ", boardCount=" + boardCount + ", boardFileCount=" + boardFileCount + ", boardWriteType="
+				+ boardWriteType + ", fList=" + fList + "]";
 	}
 
 }

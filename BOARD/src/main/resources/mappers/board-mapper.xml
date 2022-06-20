@@ -13,6 +13,7 @@
 		<result property="boardWriteDate" column="BOARD_WRITE_DATE" />
 		<result property="boardCount" column="BOARD_COUNT" />
 		<result property="boardFileCount" column="BOARD_FILE_COUNT" />
+		<result property="boardWriteType" column="BOARD_WRITE_TYPE" />
 		<collection property="fList" column="BOARD_NO" javaType="java.util.ArrayList" ofType="BoardFile" select="selectBoardFiles"></collection>
 	</resultMap>
 	
@@ -29,6 +30,9 @@
 	<resultMap type="Reply" id="replyResultMap">
 		<id property="replyNo" column="REPLY_NO" />
 		<result property="boardNo" column="BOARD_NO" />
+		<result property="parentReplyNo" column="PARENT_REPLY_NO" />
+		<result property="replyOrder" column="REPLY_ORDER" />
+		<result property="replyDepth" column="REPLY_DEPTH" />
 		<result property="emplId" column="EMPL_ID" />
 		<result property="replyContents" column="REPLY_CONTENTS" />
 		<result property="replyWriteDate" column="REPLY_WRITE_DATE" />
@@ -39,24 +43,15 @@
 	</select>
 	
 	<select id="selectBoard" resultMap="boardResultMap">
-		SELECT * FROM BOARD_TBL ORDER BY BOARD_NO DESC
-<!-- 		SELECT B.BOARD_NO, B.EMPL_ID, B.BOARD_TYPE, BOARD_TITLE, BOARD_CONTENTS, BOARD_WRITE_DATE, BOARD_COUNT, D.BOARD_WRITE_TYPE, NVL(CNT,0) AS BOARD_FILE_COUNT -->
-<!-- 	    FROM BOARD_TBL B JOIN BOARD_TYPE_TBL D ON(B.BOARD_TYPE = D.BOARD_WRITE_TYPE) -->
-<!-- 	    LEFT OUTER JOIN (SELECT F.BOARD_NO, COUNT(FILE_NO) AS CNT FROM BOARD_FILE_TBL F GROUP BY F.BOARD_NO) C -->
-<!-- 	    ON(B.BOARD_NO = C.BOARD_NO) -->
-<!-- 	    ORDER BY BOARD_NO DESC -->
+		SELECT B.BOARD_NO, B.EMPL_ID, B.BOARD_TYPE, BOARD_TITLE, BOARD_CONTENTS, BOARD_WRITE_DATE, BOARD_COUNT, BOARD_WRITE_TYPE, NVL(CNT,0) AS BOARD_FILE_COUNT
+	    FROM BOARD_TBL B JOIN BOARD_TYPE_TBL D ON(B.BOARD_TYPE = D.BOARD_TYPE)
+	    LEFT OUTER JOIN (SELECT F.BOARD_NO, COUNT(FILE_NO) AS CNT FROM BOARD_FILE_TBL F GROUP BY F.BOARD_NO) C
+	    ON(B.BOARD_NO = C.BOARD_NO)
+	    ORDER BY BOARD_NO DESC
 	</select>
 	
-	<select id="selectOneByNo" resultMap="boardResultMap">
-		SELECT * FROM BOARD_TBL WHERE BOARD_NO = #{boardNo}
-	</select>
-	
-	<select id="selectBoardFiles" resultMap="boardFileResultMap">
-		SELECT * FROM BOARD_FILE_TBL WHERE BOARD_NO = #{boardNo}
-	</select>
-	
-	<select id="searchBoard" resultMap="boardResultMap">
-		SELECT * FROM BOARD_TBL WHERE
+	<select id="selectSearchCount" resultType="_int">
+		SELECT COUNT(*) FROM BOARD_TBL WHERE
 		<if test="searchCondition.toString() =='title'">
   			BOARD_TITLE LIKE '%' || #{searchValue} || '%'
   		</if>
@@ -68,14 +63,46 @@
   		</if>
 	</select>
 	
+	<select id="selectOneByNo" resultMap="boardResultMap">
+		SELECT * FROM BOARD_TBL WHERE BOARD_NO = #{boardNo}
+	</select>
+	
+	<select id="selectBoardFiles" resultMap="boardFileResultMap">
+		SELECT * FROM BOARD_FILE_TBL WHERE BOARD_NO = #{boardNo}
+	</select>
+	
+	<select id="searchBoard" resultMap="boardResultMap">
+		SELECT B.BOARD_NO, B.EMPL_ID, B.BOARD_TYPE, BOARD_TITLE, BOARD_CONTENTS, BOARD_WRITE_DATE, BOARD_COUNT, BOARD_WRITE_TYPE, NVL(CNT,0) AS BOARD_FILE_COUNT
+	    FROM BOARD_TBL B JOIN BOARD_TYPE_TBL D ON(B.BOARD_TYPE = D.BOARD_TYPE)
+	    LEFT OUTER JOIN (SELECT F.BOARD_NO, COUNT(FILE_NO) AS CNT FROM BOARD_FILE_TBL F GROUP BY F.BOARD_NO) C
+	    ON(B.BOARD_NO = C.BOARD_NO) WHERE
+		<if test="searchCondition.toString() =='title'">
+  			BOARD_TITLE LIKE '%' || #{searchValue} || '%'
+  		</if>
+		<if test="searchCondition.toString() =='contents'">
+  			BOARD_CONTENTS LIKE '%' || #{searchValue} || '%'
+  		</if>
+		<if test="searchCondition.toString() =='writer'">
+  			EMPL_ID LIKE '%' || #{searchValue} || '%'
+  		</if>
+  		ORDER BY BOARD_NO DESC
+	</select>
+	
 	<select id="selectAllReply" resultMap="replyResultMap">
 		SELECT * FROM REPLY_TBL WHERE BOARD_NO = #{boardNo}
+		ORDER BY PARENT_REPLY_NO, REPLY_ORDER
 	</select>
 	
 	<insert id="insertReply" parameterType="Reply">
 		INSERT INTO
 		REPLY_TBL
-		(REPLY_NO_SEQ.NEXTVAL, #{boardNo}, #{emplId}, #{replyContents}, DEFAULT)
+		VALUES(REPLY_NO_SEQ.NEXTVAL, #{boardNo}, REPLY_NO_SEQ.CURRVAL, 0, 0, #{emplId}, #{replyContents}, DEFAULT)
+	</insert>
+	
+	<insert id="insertReReply" parameterType="Reply">
+		INSERT INTO
+		REPLY_TBL
+		VALUES(REPLY_NO_SEQ.NEXTVAL, #{boardNo}, #{parentReplyNo}, (SELECT MAX(REPLY_ORDER)+1 FROM REPLY_TBL WHERE PARENT_REPLY_NO = #{parentReplyNo}), 1, #{emplId}, #{replyContents}, DEFAULT)
 	</insert>
 	
 	<insert id="boardRegister" parameterType="Board">
@@ -94,7 +121,15 @@
 		UPDATE BOARD_TBL SET BOARD_COUNT = BOARD_COUNT + 1 WHERE BOARD_NO = #{boardNo}
 	</update>
 	
+	<update id="updateReply">
+		UPDATE REPLY_TBL SET REPLY_CONTENTS = #{replyContents} WHERE REPLY_NO = #{replyNo}
+	</update>
+	
 	<delete id="deleteBoard">
 		DELETE FROM BOARD_TBL WHERE BOARD_NO = #{boardNo}
+	</delete>
+	
+	<delete id="deleteReply">
+		DELETE FROM REPLY_TBL WHERE REPLY_NO = #{replyNo}
 	</delete>
 </mapper>

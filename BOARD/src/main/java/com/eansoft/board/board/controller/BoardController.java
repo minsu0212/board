@@ -11,8 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -133,6 +138,40 @@ public class BoardController {
 		return mv;
 	}
 	
+	// POI 엑셀 다운로드
+	@RequestMapping(value="/board/excel.eansoft", method=RequestMethod.GET)
+	public void downloadExcel(HttpServletResponse response) throws IOException {
+		Workbook workbook = new HSSFWorkbook();
+		Sheet sheet = workbook.createSheet("게시판글들");
+		int rowNo = 0;
+		
+		Row headerRow = sheet.createRow(rowNo++);
+		headerRow.createCell(0).setCellValue("글 번호");
+		headerRow.createCell(1).setCellValue("글 종류");
+		headerRow.createCell(2).setCellValue("글 제목");
+		headerRow.createCell(3).setCellValue("첨부파일(개수)");
+		headerRow.createCell(4).setCellValue("작성자");
+		headerRow.createCell(5).setCellValue("작성일");
+		headerRow.createCell(6).setCellValue("조회수");
+		List<Board> bList = bService.printBoard();
+		for(Board board : bList) {
+			Row row = sheet.createRow(rowNo++);
+			row.createCell(0).setCellValue(board.getBoardNo());
+			row.createCell(1).setCellValue(board.getBoardWriteType());
+			row.createCell(2).setCellValue(board.getBoardTitle());
+			row.createCell(3).setCellValue(board.getBoardFileCount());
+			row.createCell(4).setCellValue(board.getEmplId());
+			row.createCell(5).setCellValue(board.getBoardWriteDate());
+			row.createCell(6).setCellValue(board.getBoardCount());
+		}
+		
+		response.setContentType("ms-vnd/excel");
+		response.setHeader("Content-Disposition", "attachment;filename=boardList.xls");
+		
+		workbook.write(response.getOutputStream());
+		workbook.close();
+	}
+	
 	// 게시글 상세보기
 	@RequestMapping(value="/board/detail.eansoft", method=RequestMethod.GET)
 	public ModelAndView boardDetailView(ModelAndView mv
@@ -180,11 +219,16 @@ public class BoardController {
 	// 게시글 검색
 	@RequestMapping(value="/board/searchBoard.eansoft", method=RequestMethod.GET)
 	public ModelAndView boardSearchList(ModelAndView mv
-			, @ModelAttribute Search search) {
+			, @ModelAttribute Search search
+			, @RequestParam(value="page", required=false) Integer page) {
 		try {
-			List<Board> bList = bService.searchBoard(search);
+			int currentPage = (page != null) ? page : 1;
+			int totalCount = bService.getSearchCount(search);
+			PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
+			List<Board> bList = bService.searchBoard(search, pi);
 			if(!bList.isEmpty()) {
 				mv.addObject("bList", bList);
+				mv.addObject("pi", pi);
 				mv.setViewName("board/boardList");
 			}else {
 				mv.addObject("msg", "검색조회 실패");
@@ -201,7 +245,9 @@ public class BoardController {
 	@ResponseBody
 	@RequestMapping(value="/board/replyList.eansoft", method=RequestMethod.GET)
 	public void boardReplyView(@ModelAttribute Reply reply
+			, @RequestParam("boardNo") int boardNo
 			, HttpServletResponse response) throws JsonIOException, IOException {
+		reply.setBoardNo(boardNo);
 		List<Reply> nReplyList = bService.printAllReply(reply);
 		if(!nReplyList.isEmpty()) {
 			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
@@ -209,23 +255,83 @@ public class BoardController {
 		}
 	}
 	
-	// 게시글에 댓글 등록
+	// 댓글 등록
 	@ResponseBody
 	@RequestMapping(value="/board/replyAdd.eansoft", method=RequestMethod.POST)
 	public String registerReply(@RequestParam("boardNo") int boardNo
 			, @RequestParam("replyContents") String replyContents
 			, HttpServletRequest request) {
-		Reply reply = new Reply();
-		HttpSession session = request.getSession();
-		String emplId = (String) session.getAttribute("emplId");
-		reply.setBoardNo(boardNo);
-		reply.setEmplId(emplId);
-		reply.setReplyContents(replyContents);
-		int result = bService.registerReply(reply);
-		if (result > 0) {
-			return "success";
-		}else {
-			return "fail";
+		try {
+			Reply reply = new Reply();
+			HttpSession session = request.getSession();
+			String emplId = (String) session.getAttribute("emplId");
+			reply.setBoardNo(boardNo);
+			reply.setEmplId(emplId);
+			reply.setReplyContents(replyContents);
+			int result = bService.registerReply(reply);
+			if (result > 0) {
+				return "success";
+			}else {
+				return "fail";
+			}
+		}catch(Exception e) {
+			return e.toString();
+		}
+	}
+	
+	// 댓글 삭제
+	@ResponseBody
+	@RequestMapping(value="/board/replyDelete.eansoft", method=RequestMethod.GET)
+	public String deleteReply(@RequestParam("replyNo") int replyNo) {
+		try {
+			int result = bService.deleteReply(replyNo);
+			if(result > 0) {
+				return "success";
+			}else {
+				return "fail";
+			}
+		}catch(Exception e) {
+			return e.toString();
+		}
+	}
+	
+	// 댓글 수정
+	@ResponseBody
+	@RequestMapping(value="/board/replyModify.eansoft", method=RequestMethod.POST)
+	public String modifyReply(@RequestParam("replyNo") int replyNo
+			, @RequestParam("replyContents") String replyContents) {
+		try {
+			Reply reply = new Reply();
+			reply.setReplyNo(replyNo);
+			reply.setReplyContents(replyContents);
+			int result = bService.modifyReply(reply);
+			if(result > 0) {
+				return "success";
+			}else {
+				return "fail";
+			}
+		}catch(Exception e) {
+			return e.toString();
+		}
+	}
+	
+	// 답글 작성
+	@ResponseBody
+	@RequestMapping(value="/board/registerReReply.eansoft", method=RequestMethod.POST)
+	public String addReReply(@ModelAttribute Reply reply
+			, HttpServletRequest request) {
+		try {
+			HttpSession session = request.getSession();
+			String emplId = (String) session.getAttribute("emplId");
+			reply.setEmplId(emplId);
+			int result = bService.addReReply(reply);
+			if(result > 0) {
+				return "success";
+			}else {
+				return "fail";
+			}
+		}catch(Exception e) {
+			return e.toString();
 		}
 	}
 	

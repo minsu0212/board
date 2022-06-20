@@ -16,6 +16,8 @@
             <button type="submit"></button>
         </form>
 	
+	<button class="basic" type="button" onclick="location.href='/board/list.eansoft'">전체 목록</button>
+	
 	<table class="table--basic">
 		<colgroup>
 			<col style="width:8%;">
@@ -41,12 +43,12 @@
 			<c:forEach items="${bList }" var="board">
 				<tr>
 					<td>${board.boardNo }</td>
-					<td>${board.boardType }</td>
+					<td>${board.boardWriteType }</td>
 					<c:url var="bDetail" value="/board/detail.eansoft">
 						<c:param name="boardNo" value="${board.boardNo }"></c:param>
 					</c:url>
                           <td><a href="${bDetail}">${board.boardTitle }</a></td>
-					<td></td>
+					<td>${board.boardFileCount }개</td>
 					<td>${board.emplId }</td>
 					<td>${board.boardWriteDate }</td>
 					<td>${board.boardCount }</td>
@@ -56,6 +58,7 @@
 	</table>
 	
 	<button class="basic" type="button" onclick="location.href='/board/write.eansoft'">게시글 등록</button>
+	<button class="basic" type="button" onclick="location.href='/board/excel.eansoft'">엑셀 다운로드</button>
 	
 	<div class="btns--paging">
 		<button class="fa-solid fa-angles-left first"

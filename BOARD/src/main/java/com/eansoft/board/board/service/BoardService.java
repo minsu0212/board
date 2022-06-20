@@ -24,10 +24,20 @@ public interface BoardService {
 
 	void updateCount(int boardNo);
 
-	List<Board> searchBoard(Search search);
+	List<Board> searchBoard(Search search, PageInfo pi);
 
 	List<Reply> printAllReply(Reply reply);
 
 	int registerReply(Reply reply);
+
+	int deleteReply(int replyNo);
+
+	int modifyReply(Reply reply);
+
+	int addReReply(Reply reply);
+
+	int getSearchCount(Search search);
+
+	List<Board> printBoard();
 
 }

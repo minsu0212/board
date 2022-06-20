@@ -82,6 +82,7 @@ button {
     font-size: 14px;
     line-height: 1;
     outline: none;
+    cursor: pointer;
 }
 
 button.basic {
@@ -223,3 +224,72 @@ button.last {
     height: 27px;
     border: none;
 }
+
+#reply-div {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+#reply-div textarea,
+#reply-div button {
+    height: 90px;
+}
+
+#reply-div>div:first-child {
+    position: relative;
+    width: calc(100% - 110px);
+}
+
+#reply-div>div:first-child span {
+    position: absolute;
+    top: 16px;
+    left: 20px;
+}
+
+#reply-div textarea {
+    width: 100%;
+    padding: 16px 20px;
+    padding-top: 36px;
+}
+
+#reply-div {
+    width: 100%;
+}
+
+#rSubmit {
+    background-color: white;
+    border: solid 1px lightgray;
+    height: 30px;
+    width: 100px;
+}
+
+.reply-table {
+    width: 100%;
+    border: 1px solid #ccc;
+}
+
+.reply-table th,
+.reply-table td {
+    /* vertical-align: middle; */
+    /* border-collapse: collapse;
+        border-bottom: 1px solid #ccc; */
+}
+
+.reply-table th {
+    padding: 10px 20px;
+    text-align: left;
+}
+
+.reply-table td {
+    padding: 16px 20px;
+}
+
+#reWriter {
+    padding: 16px 10px 16px 30px;
+}
+
+#reWriter img {
+    margin-right: 6px;
+}
+

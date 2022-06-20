@@ -64,8 +64,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<Board> searchBoard(Search search) {
-		List<Board> bList = bStore.searchBoard(sqlSession, search);
+	public List<Board> searchBoard(Search search, PageInfo pi) {
+		List<Board> bList = bStore.searchBoard(sqlSession, search, pi);
 		return bList;
 	}
 
@@ -79,6 +79,36 @@ public class BoardServiceImpl implements BoardService {
 	public int registerReply(Reply reply) {
 		int result = bStore.insertReply(sqlSession, reply);
 		return result;
+	}
+
+	@Override
+	public int deleteReply(int replyNo) {
+		int result = bStore.deleteReply(sqlSession, replyNo);
+		return result;
+	}
+
+	@Override
+	public int modifyReply(Reply reply) {
+		int result = bStore.updateReply(sqlSession, reply);
+		return result;
+	}
+
+	@Override
+	public int addReReply(Reply reply) {
+		int result = bStore.insertReReply(sqlSession, reply);
+		return result;
+	}
+
+	@Override
+	public int getSearchCount(Search search) {
+		int totalCount = bStore.selectSearchCount(sqlSession, search);
+		return totalCount;
+	}
+
+	@Override
+	public List<Board> printBoard() {
+		List<Board> bList = bStore.selectBoard(sqlSession);
+		return bList;
 	}
 
 }

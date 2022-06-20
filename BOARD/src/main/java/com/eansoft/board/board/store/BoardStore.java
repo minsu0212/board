@@ -26,10 +26,20 @@ public interface BoardStore {
 
 	void updateCount(SqlSession sqlSession, int boardNo);
 
-	List<Board> searchBoard(SqlSession sqlSession, Search search);
+	List<Board> searchBoard(SqlSession sqlSession, Search search, PageInfo pi);
 
 	List<Reply> selectAllReply(SqlSession sqlSession, Reply reply);
 
 	int insertReply(SqlSession sqlSession, Reply reply);
+
+	int deleteReply(SqlSession sqlSession, int replyNo);
+
+	int updateReply(SqlSession sqlSession, Reply reply);
+
+	int insertReReply(SqlSession sqlSession, Reply reply);
+
+	int selectSearchCount(SqlSession sqlSession, Search search);
+
+	List<Board> selectBoard(SqlSession sqlSession);
 
 }

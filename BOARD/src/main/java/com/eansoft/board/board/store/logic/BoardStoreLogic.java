@@ -62,8 +62,12 @@ public class BoardStoreLogic implements BoardStore {
 	}
 
 	@Override
-	public List<Board> searchBoard(SqlSession sqlSession, Search search) {
-		List<Board> bList = sqlSession.selectList("BoardMapper.searchBoard", search);
+	public List<Board> searchBoard(SqlSession sqlSession, Search search, PageInfo pi) {
+		int limit = pi.getListLimit();
+		int currentPage = pi.getCurrentPage();
+		int offset = (currentPage - 1)*limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		List<Board> bList = sqlSession.selectList("BoardMapper.searchBoard", search, rowBounds);
 		return bList;
 	}
 
@@ -77,6 +81,36 @@ public class BoardStoreLogic implements BoardStore {
 	public int insertReply(SqlSession sqlSession, Reply reply) {
 		int result = sqlSession.insert("BoardMapper.insertReply", reply);
 		return result;
+	}
+
+	@Override
+	public int deleteReply(SqlSession sqlSession, int replyNo) {
+		int result = sqlSession.delete("BoardMapper.deleteReply", replyNo);
+		return result;
+	}
+
+	@Override
+	public int updateReply(SqlSession sqlSession, Reply reply) {
+		int result = sqlSession.update("BoardMapper.updateReply", reply);
+		return result;
+	}
+
+	@Override
+	public int insertReReply(SqlSession sqlSession, Reply reply) {
+		int result = sqlSession.insert("BoardMapper.insertReReply", reply);
+		return result;
+	}
+
+	@Override
+	public int selectSearchCount(SqlSession sqlSession, Search search) {
+		int totalCount = sqlSession.selectOne("BoardMapper.selectSearchCount", search);
+		return totalCount;
+	}
+
+	@Override
+	public List<Board> selectBoard(SqlSession sqlSession) {
+		List<Board> bList = sqlSession.selectList("BoardMapper.selectBoard");
+		return bList;
 	}
 
 }

@@ -96,7 +96,7 @@
 				dataType : "json",
 				success : function(data) {
 					var count = data.length;
-					var $tableBody = $("rtb tbody");
+					var $tableBody = $("#rtb tbody");
 					$tableBody.html("");
 					var $trCount = $("<tr>");
 					
@@ -108,22 +108,22 @@
 						var $reWriter 	 = $("<td width='160' id='reWriter'><img src='../../../../resources/images/icons/rereply.png' style='width:20px; height:auto; vertical-align: middle; align :right;'/><b>"+data[i].emplId+"</b>");
 						var $rContent 	 = $("<td width='250' colspan='2' class='rContent'>").text(data[i].replyContents);
 						var $reContent 	 = $("<td width='250' colspan='2' class='rContent' >").text(data[i].replyContents);
-						var $rCreateDate = $("<td class='t-c' width='120'>").text(data[i].writeDate);
+						var $rCreateDate = $("<td class='t-c' width='120'>").text(data[i].replyWriteDate);
 						var $btnArea 	 = $("<td class='t-c' width='100'>")
-											.append("<a href='javascript:void(0)' onclick='modReplyView(this, "+data[i].replyNo+", \""+data[i].replyContents+"\");'>수정</a> ")
-											.append("<a href='javascript:void(0)' onclick='removeReply("+data[i].replyNo+");'>삭제</a>")
+											.append("<a href='javascript:void(0)' onclick='modReplyView(this, "+data[i].replyNo+", \""+data[i].replyContents+"\", \""+data[i].emplId+"\");'>수정</a> ")
+											.append("<a href='javascript:void(0)' onclick='removeReply("+data[i].replyNo+", \""+data[i].emplId+"\");'>삭제</a>")
 
 							
-						var $btnReReply	 = $("<td class='t-c' width='100'>").append("<a href='javascript:void(0)' onclick='ReReplyWriteView(this, "+data[i].replyNo+", \""+data[i].replyContents+"\");'>답글</a>");
+						var $btnReReply	 = $("<td class='t-c' width='100'>").append("<a href='javascript:void(0)' onclick='ReReplyWriteView(this, "+data[i].replyNo+", \""+data[i].replyContents+"\", \""+data[i].emplId+"\");'>답글</a>");
 						
-						if(data[i].replyOrder == 0){
+						if(data[i].replyOrder == 0) {
 							$tr.append($rWriter);
 							$tr.append($rContent);
 							$tr.append($rCreateDate);
 							$tr.append($btnArea);
 							$tr.append($btnReReply);
 							$tableBody.append($tr);
-						}else{
+						}else {
 							$tr.append($reWriter);
 							$tr.append($reContent);
 							$tr.append($rCreateDate);
@@ -144,6 +144,108 @@
 					$trMsg.append($tdMsg);
 					$tableBody.append($trCount);
 					$tableBody.append($trMsg);
+				}
+			});
+		}
+		
+		function removeReply(replyNo, emplId) {
+			var loginId = "<%=(String)session.getAttribute("emplId")%>";
+			if(loginId == emplId) {
+				var result = confirm("댓글을 삭제하시겠습니까?");
+				if(result == true) {
+					$.ajax({
+						url : "/board/replyDelete.eansoft",
+						type : "get",
+						data : { "replyNo" : replyNo },
+						success : function(data) {
+							if(data == "success") {
+								getReplyList();
+							}else {
+								alert("댓글 삭제 실패!");
+							}
+						},
+						error : function() {
+							alert("Ajax 통신 실패!");
+						}
+					});
+				}else {}
+			}else {
+				alert("작성자만 삭제할 수 있습니다.");
+			}
+		}
+		
+		function modReplyView(obj, replyNo, replyContents, emplId) {
+			var loginId = "<%=(String)session.getAttribute("emplId")%>";
+			if(loginId == emplId) {
+				var $trModify = $("<tr>");
+				var $tdModify = $("<td colspan='3'>");
+				var $tdModifyBtn = $("<td>");
+				
+				$tdModify.append("<input type='text' size='50' value='"+replyContents+"' id='modifyData'>");
+				$tdModifyBtn.append("<button onclick='modReply("+replyNo+");'>수정완료</button>");
+				$trModify.append($tdModify);
+				$trModify.append($tdModifyBtn);
+				$(obj).parent().parent().after($trModify);
+			}else {
+				alert("작성자만 수정할 수 있습니다.");
+			}
+		}
+		
+		function modReply(replyNo) {
+			var replyContents = $("#modifyData").val();
+			$.ajax({
+				url : "/board/replyModify.eansoft",
+				type : "post",
+				data : { "replyNo" : replyNo, "replyContents" : replyContents },
+				success : function(data) {
+					if(data == "success") {
+						getReplyList();
+					}else {
+						alert("댓글 수정 실패");
+					}
+				},
+				error : function() {
+					alert("Ajax 통신 실패");
+				}
+			});
+		}
+		
+		function ReReplyWriteView(obj, parentReplyNo, replyContents, emplId) {
+			var loginId = "<%=(String)session.getAttribute("emplId")%>";
+			if(loginId == emplId) {
+				var $trReReply = $("<tr>");
+				var $tdReReply = $("<td colspan='3'>");
+				var $tdReReplyBtn = $("<td>");
+				
+				$tdReReply.append("<input type='text' size='50' id='reReplyData'>");
+				$tdReReplyBtn.append("<button onclick='insertReReply("+parentReplyNo+");'>등록</button>");
+				$trReReply.append($tdReReply);
+				$trReReply.append($tdReReplyBtn);
+				$(obj).parent().parent().after($trReReply);
+			}else {
+				alert("작성자만 답글을 작성할 수 있습니다.");
+			}
+		}
+		
+		function insertReReply(parentReplyNo) {
+			var boardNo = "${board.boardNo}";
+			var replyContents = $("#reReplyData").val();
+			$.ajax({
+				url : "/board/registerReReply.eansoft",
+				type : "post",
+				data : { "parentReplyNo" : parentReplyNo,
+						 "replyContents" : replyContents,
+						 "boardNo" : boardNo },
+				success : function(data) {
+					if(data == "success") {
+						alert("답글 등록 성공");
+						getReplyList();
+					}else {
+						alert("답글 등록 실패");
+					}
+				},
+				error : function() {
+					alert("Ajax 통신 실패!");
 				}
 			});
 		}
