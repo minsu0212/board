@@ -1,11 +1,8 @@
 package com.eansoft.board.board.controller;
 
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +14,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,6 +28,7 @@ import com.eansoft.board.board.domain.Reply;
 import com.eansoft.board.board.service.BoardService;
 import com.eansoft.board.common.PageInfo;
 import com.eansoft.board.common.Pagination;
+import com.eansoft.board.common.SaveMultipartFile;
 import com.eansoft.board.common.Search;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -54,28 +51,30 @@ public class BoardController {
 	@RequestMapping(value="/board/register.eansoft", method=RequestMethod.POST)
 	public ModelAndView boardRegister(ModelAndView mv
 			, @ModelAttribute Board board
-			, @ModelAttribute BoardFile boardFile
-			, @RequestParam(value="uploadFile", required=false) MultipartFile uploadFile
+			, @RequestParam(value="uploadFiles", required=false) List<MultipartFile> uploadFile
 			, HttpServletRequest request) {
 		try {
 			HttpSession session = request.getSession();
 			String emplId = (String) session.getAttribute("emplId");
 			board.setEmplId(emplId);
-			boardFile.setEmplId(emplId);
 			int result = bService.boardRegister(board);
-			if(uploadFile != null && !uploadFile.getOriginalFilename().equals("")) {
-				HashMap<String, String> fileMap = saveFile(uploadFile, request);
-				String filePath = fileMap.get("filePath");
-				String fileRename = fileMap.get("fileName");
-				String fileExtension = fileMap.get("fileExtension");
-				
-				if(filePath != null && !filePath.equals("")) {
-					boardFile.setFileName(uploadFile.getOriginalFilename());
+			if(uploadFile.size() > 0 && !uploadFile.get(0).getOriginalFilename().equals("")) {
+				List<Map<String, String>> fileList = SaveMultipartFile.saveFile(uploadFile, request);
+				for(int i = 0; i < uploadFile.size(); i++) {
+					String fileName = fileList.get(i).get("fileName");
+					String fileExtension = fileList.get(i).get("fileExtension");
+					String fileRename = fileList.get(i).get("fileRename");
+					String filePath = fileList.get(i).get("filePath");
+					
+					BoardFile boardFile = new BoardFile();
+					boardFile.setFileName(fileName);
 					boardFile.setFileExtension(fileExtension);
 					boardFile.setFileRename(fileRename);
 					boardFile.setFilePath(filePath);
+					boardFile.setEmplId(emplId);
+					
+					result = bService.saveFile(boardFile);
 				}
-				result = bService.saveFile(boardFile);
 			}
 			if(result > 0) {
 				mv.setViewName("redirect:/board/list.eansoft");
@@ -88,30 +87,6 @@ public class BoardController {
 			mv.setViewName("common/errorPage");
 		}
 		return mv;
-	}
-	
-	// 첨부파일 저장
-	public HashMap<String, String> saveFile(MultipartFile file, HttpServletRequest request) {
-		String filePath = "";
-		HashMap<String, String> fileMap = new HashMap<String, String>();
-		String root = request.getSession().getServletContext().getRealPath("resources");
-		String savePath = root + "\\nuploadFiles";
-		File folder = new File(savePath);
-		if(!folder.exists()) folder.mkdir();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-		String originalFileName = file.getOriginalFilename();
-		String extensionName = originalFileName.substring(originalFileName.lastIndexOf(".")+1);
-		String renameFileName = sdf.format(new Date(System.currentTimeMillis()))+"."+extensionName;
-		filePath = folder + "\\" + renameFileName;
-		fileMap.put("fileExtension", extensionName);
-		fileMap.put("filePath", filePath);
-		fileMap.put("fileName", renameFileName);
-		try {
-			file.transferTo(new File(filePath));
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-		return fileMap;
 	}
 	
 	// 게시글 조회

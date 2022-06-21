@@ -26,5 +26,5 @@
         src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"
         integrity="sha256-eTyxS0rkjpLEo16uXTS0uVCS4815lc40K2iVpWDvdSY="
         crossorigin="anonymous"></script>
-    <script src="../../resources/js/common.js"></script>
+<!--     <script src="../../resources/js/common.js"></script> -->
 </head>

@@ -6,7 +6,7 @@
 <body>
 	<h1>게시글 작성</h1>
 
-	<form action="/board/register.eansoft" method="post">
+	<form action="/board/register.eansoft" method="post" enctype="multipart/form-data">
 		<table class="table--basic">
 			<tr>
 				<td>글 종류</td>
@@ -24,7 +24,7 @@
 			</tr>
 			<tr>
 				<td>첨부파일</td>
-				<td><input type="file" size="50" name="uploadFile" value="파일선택"></td>
+				<td><input type="file" name="uploadFiles" multiple></td>
 			</tr>
 			<tr>
 				<td>글 내용</td>

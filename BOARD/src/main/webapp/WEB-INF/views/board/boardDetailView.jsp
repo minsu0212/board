@@ -36,10 +36,10 @@
 		</tr>
 		<tr>
 			<td colspan="2">
-				<c:if test="${boardFile.fileRename ne null }">
-					<a href="../../../resources/nuploadFiles/${boardFile.fileRename }" download>${boardFile.fileName }</a>
-				</c:if>
-				<c:if test="${boardFile.fileRename eq null }">
+			<c:forEach var="file" items="${board.fList }">
+					<img src="../../../../resources/images/icons/attachedFile.png" style="width:12px; height:auto; vertical-align: middle;"/><a href="../../../../resources/uploadFiles/${file.fileRename }" download>${file.fileName}</a>
+			</c:forEach>
+				<c:if test="${empty board.fList}">
 					등록된 첨부파일이 없습니다.
 				</c:if>
 			</td>
@@ -74,7 +74,6 @@
 						 "replyContents" : replyContents },
 				success : function(data) {
 					if(data == "success") {
-						alert("댓글 등록 성공");
 						$("#reply-div textarea").val("");
 						getReplyList();
 					}else {
@@ -182,7 +181,7 @@
 				var $tdModifyBtn = $("<td>");
 				
 				$tdModify.append("<input type='text' size='50' value='"+replyContents+"' id='modifyData'>");
-				$tdModifyBtn.append("<button onclick='modReply("+replyNo+");'>수정완료</button>");
+				$tdModifyBtn.append("<button class='basic' onclick='modReply("+replyNo+");'>수정완료</button>");
 				$trModify.append($tdModify);
 				$trModify.append($tdModifyBtn);
 				$(obj).parent().parent().after($trModify);
@@ -218,7 +217,7 @@
 				var $tdReReplyBtn = $("<td>");
 				
 				$tdReReply.append("<input type='text' size='50' id='reReplyData'>");
-				$tdReReplyBtn.append("<button onclick='insertReReply("+parentReplyNo+");'>등록</button>");
+				$tdReReplyBtn.append("<button class='basic' onclick='insertReReply("+parentReplyNo+");'>등록</button>");
 				$trReReply.append($tdReReply);
 				$trReReply.append($tdReReplyBtn);
 				$(obj).parent().parent().after($trReReply);
@@ -238,7 +237,6 @@
 						 "boardNo" : boardNo },
 				success : function(data) {
 					if(data == "success") {
-						alert("답글 등록 성공");
 						getReplyList();
 					}else {
 						alert("답글 등록 실패");
