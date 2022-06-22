@@ -111,4 +111,10 @@ public class BoardServiceImpl implements BoardService {
 		return bList;
 	}
 
+	@Override
+	public int modifyBoard(Board board) {
+		int result = bStore.updateBoard(sqlSession, board);
+		return result;
+	}
+
 }

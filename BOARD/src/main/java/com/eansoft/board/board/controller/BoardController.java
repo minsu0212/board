@@ -105,6 +105,7 @@ public class BoardController {
 			List<Board> bList = bService.printBoard(board, pi);
 			mv.addObject("bList", bList);
 			mv.addObject("pi", pi);
+			mv.addObject("paging", "paging");
 			mv.setViewName("board/boardList");
 		}catch(Exception e) {
 			mv.addObject("msg", e.toString());
@@ -185,10 +186,32 @@ public class BoardController {
 	}
 	
 	// 게시글 수정 화면
-	@RequestMapping(value="/board/modify.eansoft", method=RequestMethod.GET)
-	public ModelAndView boardModify(ModelAndView mv) {
+	@RequestMapping(value="/board/modifyView.eansoft", method=RequestMethod.GET)
+	public ModelAndView boardModifyView(ModelAndView mv) {
 		mv.setViewName("board/boardModifyView");
 		return mv;
+	}
+	
+	// 게시글 수정
+	@ResponseBody
+	@RequestMapping(value="/board/boardModify.eansoft", method=RequestMethod.POST)
+	public String modifyBoard(@RequestParam("boardNo") int boardNo
+			, @RequestParam("boardTitle") String boardTitle
+			, @RequestParam("boardContents") String boardContents) {
+		try {
+			Board board = new Board();
+			board.setBoardNo(boardNo);
+			board.setBoardTitle(boardTitle);
+			board.setBoardContents(boardContents);
+			int result = bService.modifyBoard(board);
+			if(result > 0) {
+				return "success";
+			}else {
+				return "fail";
+			}
+		}catch(Exception e) {
+			return e.toString();
+		}
 	}
 	
 	// 게시글 검색
@@ -197,13 +220,14 @@ public class BoardController {
 			, @ModelAttribute Search search
 			, @RequestParam(value="page", required=false) Integer page) {
 		try {
-			int currentPage = (page != null) ? page : 1;
+			int currentPage = 1;
 			int totalCount = bService.getSearchCount(search);
 			PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
 			List<Board> bList = bService.searchBoard(search, pi);
 			if(!bList.isEmpty()) {
 				mv.addObject("bList", bList);
 				mv.addObject("pi", pi);
+				mv.addObject("paging", "searchPaging");
 				mv.setViewName("board/boardList");
 			}else {
 				mv.addObject("msg", "검색조회 실패");

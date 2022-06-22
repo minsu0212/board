@@ -1,6 +1,7 @@
 package com.eansoft.board.common;
 
 public class Pagination {
+	
 	public static PageInfo getPageInfo(int currentPage, int totalCount) {
 		PageInfo pi = null;
 		

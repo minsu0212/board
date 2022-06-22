@@ -40,4 +40,6 @@ public interface BoardService {
 
 	List<Board> printBoard();
 
+	int modifyBoard(Board board);
+
 }

@@ -121,6 +121,11 @@
 		UPDATE BOARD_TBL SET BOARD_COUNT = BOARD_COUNT + 1 WHERE BOARD_NO = #{boardNo}
 	</update>
 	
+	<update id="updateBoard">
+		UPDATE BOARD_TBL SET
+		BOARD_TITLE = #{boardTitle}, BOARD_CONTENTS = #{boardContents} WHERE BOARD_NO = #{boardNo}
+	</update>
+	
 	<update id="updateReply">
 		UPDATE REPLY_TBL SET REPLY_CONTENTS = #{replyContents} WHERE REPLY_NO = #{replyNo}
 	</update>
@@ -130,6 +135,6 @@
 	</delete>
 	
 	<delete id="deleteReply">
-		DELETE FROM REPLY_TBL WHERE REPLY_NO = #{replyNo}
+		DELETE FROM REPLY_TBL WHERE REPLY_NO = #{replyNo} OR PARENT_REPLY_NO = #{parentReplyNo}
 	</delete>
 </mapper>

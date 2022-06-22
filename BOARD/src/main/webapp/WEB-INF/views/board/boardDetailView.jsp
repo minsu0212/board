@@ -7,7 +7,7 @@
 	<h1>게시글 상세보기</h1>
 
 	<button class="basic" type="button" onclick="deleteBoard(${board.boardNo});">삭제</button>
-	<button class="basic" type="button" onclick="location.href='/board/modify.eansoft'">수정</button>
+	<button class="basic" type="button" onclick="location.href='/board/modifyView.eansoft'">수정</button>
 	<button class="basic" onclick="historyBack();">목록</button>
 	<table class="table--basic">
 		<colgroup>
@@ -37,11 +37,11 @@
 		<tr>
 			<td colspan="2">
 			<c:forEach var="file" items="${board.fList }">
-					<img src="../../../../resources/images/icons/attachedFile.png" style="width:12px; height:auto; vertical-align: middle;"/><a href="../../../../resources/uploadFiles/${file.fileRename }" download>${file.fileName}</a>
+				<img src="../../../../resources/images/icons/attachedFile.png" style="width:12px; height:auto; vertical-align: middle;"/><a href="../../../../resources/uploadFiles/${file.fileRename }" download>${file.fileName}</a>
 			</c:forEach>
-				<c:if test="${empty board.fList}">
-					등록된 첨부파일이 없습니다.
-				</c:if>
+			<c:if test="${empty board.fList}">
+				등록된 첨부파일이 없습니다.
+			</c:if>
 			</td>
 		</tr>
 		<tr>

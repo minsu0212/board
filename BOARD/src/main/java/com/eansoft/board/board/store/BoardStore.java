@@ -42,4 +42,6 @@ public interface BoardStore {
 
 	List<Board> selectBoard(SqlSession sqlSession);
 
+	int updateBoard(SqlSession sqlSession, Board board);
+
 }
