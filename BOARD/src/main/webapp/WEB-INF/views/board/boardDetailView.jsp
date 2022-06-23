@@ -6,7 +6,6 @@
 <body>
 	<h1>게시글 상세보기</h1>
 
-<!-- 	커밋 테스트 -->
 	<button class="basic" type="button" onclick="deleteBoard(${board.boardNo});">삭제</button>
 	<c:url var="bModify" value="/board/modifyView.eansoft">
 		<c:param name="boardNo" value="${board.boardNo }"></c:param>
