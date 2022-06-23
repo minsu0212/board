@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -30,6 +29,7 @@ import com.eansoft.board.common.PageInfo;
 import com.eansoft.board.common.Pagination;
 import com.eansoft.board.common.SaveMultipartFile;
 import com.eansoft.board.common.Search;
+import com.eansoft.board.util.DownUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
@@ -39,6 +39,8 @@ public class BoardController {
 
 	@Autowired
 	private BoardService bService;
+	
+//	DownUtil downutil = new DownUtil();
 	
 	// 게시글 작성페이지로 이동
 	@RequestMapping(value="/board/write.eansoft", method=RequestMethod.GET)
@@ -114,9 +116,9 @@ public class BoardController {
 		return mv;
 	}
 	
-	// POI 엑셀 다운로드
+	// POI 엑셀 다운로드(전체)
 	@RequestMapping(value="/board/excel.eansoft", method=RequestMethod.GET)
-	public void downloadExcel(HttpServletResponse response) throws IOException {
+	public void downloadExcel(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		Workbook workbook = new HSSFWorkbook();
 		Sheet sheet = workbook.createSheet("게시판글들");
 		int rowNo = 0;
@@ -143,6 +145,41 @@ public class BoardController {
 		
 		response.setContentType("ms-vnd/excel");
 		response.setHeader("Content-Disposition", "attachment;filename=boardList.xls");
+		
+		workbook.write(response.getOutputStream());
+		workbook.close();
+	}
+	
+	// POI 엑셀 다운로드(검색)
+	@RequestMapping(value="/board/excelSearch.eansoft", method=RequestMethod.GET)
+	public void downloadExcelSearch(HttpServletResponse response
+			, @ModelAttribute Search search) throws IOException {
+		Workbook workbook = new HSSFWorkbook();
+		Sheet sheet = workbook.createSheet("게시판검색한글들");
+		int rowNo = 0;
+		
+		Row headerRow = sheet.createRow(rowNo++);
+		headerRow.createCell(0).setCellValue("글 번호");
+		headerRow.createCell(1).setCellValue("글 종류");
+		headerRow.createCell(2).setCellValue("글 제목");
+		headerRow.createCell(3).setCellValue("첨부파일(개수)");
+		headerRow.createCell(4).setCellValue("작성자");
+		headerRow.createCell(5).setCellValue("작성일");
+		headerRow.createCell(6).setCellValue("조회수");
+		List<Board> bList = bService.searchBoardExcel(search);
+		for(Board board : bList) {
+			Row row = sheet.createRow(rowNo++);
+			row.createCell(0).setCellValue(board.getBoardNo());
+			row.createCell(1).setCellValue(board.getBoardWriteType());
+			row.createCell(2).setCellValue(board.getBoardTitle());
+			row.createCell(3).setCellValue(board.getBoardFileCount());
+			row.createCell(4).setCellValue(board.getEmplId());
+			row.createCell(5).setCellValue(board.getBoardWriteDate());
+			row.createCell(6).setCellValue(board.getBoardCount());
+		}
+		
+		response.setContentType("ms-vnd/excel");
+		response.setHeader("Content-Disposition", "attachment;filename=boardSearchList.xls");
 		
 		workbook.write(response.getOutputStream());
 		workbook.close();

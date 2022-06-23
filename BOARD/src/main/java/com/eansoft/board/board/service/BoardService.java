@@ -42,4 +42,6 @@ public interface BoardService {
 
 	int modifyBoard(Board board);
 
+	List<Board> searchBoardExcel(Search search);
+
 }

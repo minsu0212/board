@@ -119,4 +119,10 @@ public class BoardStoreLogic implements BoardStore {
 		return result;
 	}
 
+	@Override
+	public List<Board> searchBoardExcel(SqlSession sqlSession, Search search) {
+		List<Board> bList = sqlSession.selectList("BoardMapper.searchBoard", search);
+		return bList;
+	}
+
 }

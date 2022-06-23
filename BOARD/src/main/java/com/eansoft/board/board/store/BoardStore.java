@@ -44,4 +44,6 @@ public interface BoardStore {
 
 	int updateBoard(SqlSession sqlSession, Board board);
 
+	List<Board> searchBoardExcel(SqlSession sqlSession, Search search);
+
 }

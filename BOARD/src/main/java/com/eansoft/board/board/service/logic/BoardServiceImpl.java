@@ -117,4 +117,10 @@ public class BoardServiceImpl implements BoardService {
 		return result;
 	}
 
+	@Override
+	public List<Board> searchBoardExcel(Search search) {
+		List<Board> bList = bStore.searchBoardExcel(sqlSession, search);
+		return bList;
+	}
+
 }

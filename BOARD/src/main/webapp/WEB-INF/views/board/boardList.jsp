@@ -7,15 +7,15 @@
 	<h1>게시판</h1>
 	
 	<form class="form--srch" action="/board/searchBoard.eansoft" method="get">
-		<select name="searchCondition">
+		<select name="searchCondition" id="searchCondition">
 			<option value="title">제목</option>
 			<option value="contents">내용</option>
 			<option value="writer">글쓴이</option>
 		</select>
-            <input type="text" name="searchValue" placeholder="검색">
-            <input type="hidden" name="page" value="1">
-            <button type="submit"></button>
-        </form>
+		<input type="text" name="searchValue" id="searchValue" placeholder="검색">
+		<input type="hidden" name="page" value="1">
+		<button type="submit"></button>
+	</form>
 	
 	<button class="basic" type="button" onclick="location.href='/board/list.eansoft'">전체 목록</button>
 	
@@ -59,7 +59,11 @@
 	</table>
 	
 	<button class="basic" type="button" onclick="location.href='/board/write.eansoft'">게시글 등록</button>
-	<button class="basic" type="button" onclick="location.href='/board/excel.eansoft'">엑셀 다운로드</button>
+	<button class="basic" type="button" onclick="location.href='/board/excel.eansoft'">엑셀 다운로드(전체)</button>
+	<c:url var="excelSearch" value="/board/excelSearch.eansoft?searchCondition=${search.searchCondition }&searchValue=${search.searchValue }"></c:url>
+	<button class="basic" type="button" onclick="document.execCommand('SaveAs'), location.href='${excelSearch}'">엑셀 다운로드(검색)</button>
+	
+	<!-- 기본 페이징 -->
 	<c:if test="${paging eq 'paging' }">
 		<div class="btns--paging">
 			<button class="fa-solid fa-angles-left first"
@@ -79,6 +83,7 @@
 		</div>
 	</c:if>
 	
+	<!-- 검색 후 페이징 -->
 	<c:if test="${paging eq 'searchPaging' }">
 		<div class="btns--paging">
 			<button class="fa-solid fa-angles-left first"
