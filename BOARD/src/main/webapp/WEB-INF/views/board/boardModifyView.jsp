@@ -45,9 +45,9 @@
 			<td colspan="2"><textarea id="boardContents">${board.boardContents }</textarea></td>
 		</tr>
 	</table>
-	<button class="basic" onclick="boardModify();">수정</button>
+	<button class="basic" onclick="boardModify(${board.boardNo });">수정</button>
 	<script>
-		function boardModify() {
+		function boardModify(boardNo) {
 			var boardTitle = $("#boardTitle").val();
 			var boardContents = $("#boardContents").val();
 			$.ajax({
@@ -57,11 +57,11 @@
 						 "boardTitle" : boardTitle,
 						 "boardContents" : boardContents },
 				success : function() {
-					location.href="/board/list.eansoft";
+					location.href = "/board/list.eansoft";
 				},
 				error : function() {
 					alert("Ajax 실패!");
-				}	 
+				}
 			});
 		}
 	</script>

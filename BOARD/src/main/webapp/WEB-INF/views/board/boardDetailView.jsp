@@ -7,7 +7,10 @@
 	<h1>게시글 상세보기</h1>
 
 	<button class="basic" type="button" onclick="deleteBoard(${board.boardNo});">삭제</button>
-	<button class="basic" type="button" onclick="location.href='/board/modifyView.eansoft'">수정</button>
+	<c:url var="bModify" value="/board/modifyView.eansoft">
+		<c:param name="boardNo" value="${board.boardNo }"></c:param>
+	</c:url>
+	<button class="basic" type="button" onclick="location.href='${bModify}'">수정</button>
 	<button class="basic" onclick="historyBack();">목록</button>
 	<table class="table--basic">
 		<colgroup>

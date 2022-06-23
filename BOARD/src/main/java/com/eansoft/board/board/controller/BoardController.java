@@ -187,8 +187,21 @@ public class BoardController {
 	
 	// 게시글 수정 화면
 	@RequestMapping(value="/board/modifyView.eansoft", method=RequestMethod.GET)
-	public ModelAndView boardModifyView(ModelAndView mv) {
-		mv.setViewName("board/boardModifyView");
+	public ModelAndView boardModifyView(ModelAndView mv
+			, @RequestParam("boardNo") int boardNo) {
+		try {
+			Board board = bService.printOneByNo(boardNo);
+			if(board != null) {
+				mv.addObject("board", board);
+				mv.setViewName("board/boardModifyView");
+			}else {
+				mv.addObject("msg", "수정화면 조회 실패");
+				mv.setViewName("common/errorPage");
+			}
+		}catch(Exception e) {
+			mv.addObject("msg", e.toString());
+			mv.setViewName("common/errorPage");
+		}
 		return mv;
 	}
 	
@@ -220,7 +233,7 @@ public class BoardController {
 			, @ModelAttribute Search search
 			, @RequestParam(value="page", required=false) Integer page) {
 		try {
-			int currentPage = 1;
+			int currentPage = (page != null) ? page : 1;
 			int totalCount = bService.getSearchCount(search);
 			PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
 			List<Board> bList = bService.searchBoard(search, pi);

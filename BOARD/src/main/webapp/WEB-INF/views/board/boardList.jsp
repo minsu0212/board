@@ -60,42 +60,42 @@
 	
 	<button class="basic" type="button" onclick="location.href='/board/write.eansoft'">게시글 등록</button>
 	<button class="basic" type="button" onclick="location.href='/board/excel.eansoft'">엑셀 다운로드</button>
-	<c:if test="${paging eq paging }">
-	<div class="btns--paging">
-		<button class="fa-solid fa-angles-left first"
-		<c:if test="${pi.currentPage > '1' }">onclick="location.href='/board/list.eansoft?page=${pi.startNavi }'"</c:if>></button>
-		<button class="fa-solid fa-angle-left prev"
-		<c:if test="${pi.currentPage > '1' }">onclick="location.href='/board/list.eansoft?page=${pi.currentPage-1 }'"</c:if>></button>
-		<c:forEach var="p" begin="${pi.startNavi }" end="${pi.endNavi }">
-			<c:url var="pagination" value="/board/list.eansoft">
-				<c:param name="page" value="${p }"></c:param>
-			</c:url>
-			&nbsp;<a href="${pagination }">${p }</a>&nbsp;
-		</c:forEach>
-		<button class="fa-solid fa-angle-right next"
-		<c:if test="${pi.currentPage < pi.endNavi }">onclick="location.href='/board/list.eansoft?page=${pi.currentPage+1 }'"</c:if>></button>
-		<button class="fa-solid fa-angles-right last"
-		<c:if test="${pi.currentPage < pi.endNavi }">onclick="location.href='/board/list.eansoft?page=${pi.endNavi }'"</c:if>></button>
-	</div>
+	<c:if test="${paging eq 'paging' }">
+		<div class="btns--paging">
+			<button class="fa-solid fa-angles-left first"
+			<c:if test="${pi.currentPage > '1' }">onclick="location.href='/board/list.eansoft?page=${pi.startNavi }'"</c:if>></button>
+			<button class="fa-solid fa-angle-left prev"
+			<c:if test="${pi.currentPage > '1' }">onclick="location.href='/board/list.eansoft?page=${pi.currentPage-1 }'"</c:if>></button>
+			<c:forEach var="p" begin="${pi.startNavi }" end="${pi.endNavi }">
+				<c:url var="pagination" value="/board/list.eansoft">
+					<c:param name="page" value="${p }"></c:param>
+				</c:url>
+				&nbsp;<a href="${pagination }">${p }</a>&nbsp;
+			</c:forEach>
+			<button class="fa-solid fa-angle-right next"
+			<c:if test="${pi.currentPage < pi.endNavi }">onclick="location.href='/board/list.eansoft?page=${pi.currentPage+1 }'"</c:if>></button>
+			<button class="fa-solid fa-angles-right last"
+			<c:if test="${pi.currentPage < pi.endNavi }">onclick="location.href='/board/list.eansoft?page=${pi.endNavi }'"</c:if>></button>
+		</div>
 	</c:if>
 	
-	<c:if test="${paging ne paging }">
-	<div class="btns--paging">
-		<button class="fa-solid fa-angles-left first"
-		<c:if test="${pi.currentPage > '1' }">onclick="location.href='/board/list.eansoft?page=${pi.startNavi }'"</c:if>></button>
-		<button class="fa-solid fa-angle-left prev"
-		<c:if test="${pi.currentPage > '1' }">onclick="location.href='/board/list.eansoft?page=${pi.currentPage-1 }'"</c:if>></button>
-		<c:forEach var="p" begin="${pi.startNavi }" end="${pi.endNavi }">
-			<c:url var="pagination" value="/board/searchBoard.eansoft">
-				<c:param name="page" value="${p }"></c:param>
-			</c:url>
-			&nbsp;<a href="${pagination }">${p }</a>&nbsp;
-		</c:forEach>
-		<button class="fa-solid fa-angle-right next"
-		<c:if test="${pi.currentPage < pi.endNavi }">onclick="location.href='/board/searchBoard.eansoft?searchCondition=${search.searchCondition }&searchValue=${search.searchValue }&page=${pi.currentPage+1 }'"</c:if>></button>
-		<button class="fa-solid fa-angles-right last"
-		<c:if test="${pi.currentPage < pi.endNavi }">onclick="location.href='/board/list.eansoft?page=${pi.endNavi }'"</c:if>></button>
-	</div>
+	<c:if test="${paging eq 'searchPaging' }">
+		<div class="btns--paging">
+			<button class="fa-solid fa-angles-left first"
+			<c:if test="${pi.currentPage > '1' }">onclick="location.href='/board/searchBoard.eansoft?page=${pi.startNavi }&searchCondition=${search.searchCondition }&searchValue=${search.searchValue }'"</c:if>></button>
+			<button class="fa-solid fa-angle-left prev"
+			<c:if test="${pi.currentPage > '1' }">onclick="location.href='/board/searchBoard.eansoft?page=${pi.currentPage-1 }&searchCondition=${search.searchCondition }&searchValue=${search.searchValue }'"</c:if>></button>
+			<c:forEach var="p" begin="${pi.startNavi }" end="${pi.endNavi }">
+				<c:url var="pagination" value="/board/searchBoard.eansoft?searchCondition=${search.searchCondition }&searchValue=${search.searchValue }">
+					<c:param name="page" value="${p }"></c:param>
+				</c:url>
+				&nbsp;<a href="${pagination }">${p }</a>&nbsp;
+			</c:forEach>
+			<button class="fa-solid fa-angle-right next"
+			<c:if test="${pi.currentPage < pi.endNavi }">onclick="location.href='/board/searchBoard.eansoft?page=${pi.currentPage+1 }&searchCondition=${search.searchCondition }&searchValue=${search.searchValue }'"</c:if>></button>
+			<button class="fa-solid fa-angles-right last"
+			<c:if test="${pi.currentPage < pi.endNavi }">onclick="location.href='/board/searchBoard.eansoft?page=${pi.endNavi }&searchCondition=${search.searchCondition }&searchValue=${search.searchValue }'"</c:if>></button>
+		</div>
 	</c:if>
 	<script>
 		// 현재 페이지 하이라이팅
