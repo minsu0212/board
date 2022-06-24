@@ -29,7 +29,6 @@ import com.eansoft.board.common.PageInfo;
 import com.eansoft.board.common.Pagination;
 import com.eansoft.board.common.SaveMultipartFile;
 import com.eansoft.board.common.Search;
-import com.eansoft.board.util.DownUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
@@ -39,8 +38,6 @@ public class BoardController {
 
 	@Autowired
 	private BoardService bService;
-	
-//	DownUtil downutil = new DownUtil();
 	
 	// 게시글 작성페이지로 이동
 	@RequestMapping(value="/board/write.eansoft", method=RequestMethod.GET)

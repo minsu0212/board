@@ -48,7 +48,7 @@
 					<c:url var="bDetail" value="/board/detail.eansoft">
 						<c:param name="boardNo" value="${board.boardNo }"></c:param>
 					</c:url>
-                          <td><a href="${bDetail}">${board.boardTitle }</a></td>
+                    <td><a href="${bDetail}">${board.boardTitle }</a></td>
 					<td>${board.boardFileCount }개</td>
 					<td>${board.emplId }</td>
 					<td>${board.boardWriteDate }</td>
