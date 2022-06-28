@@ -32,7 +32,6 @@ import com.eansoft.board.common.Search;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
-
 @Controller
 public class BoardController {
 
@@ -379,6 +378,13 @@ public class BoardController {
 		}catch(Exception e) {
 			return e.toString();
 		}
+	}
+	
+	// 통계 화면
+	@RequestMapping(value="/board/statisticsView.eansoft", method=RequestMethod.GET)
+	public ModelAndView statisticsView(ModelAndView mv) {
+		mv.setViewName("board/boardStatisticsView");
+		return mv;
 	}
 	
 }
