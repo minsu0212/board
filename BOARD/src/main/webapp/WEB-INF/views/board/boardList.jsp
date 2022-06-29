@@ -62,6 +62,8 @@
 	<button class="basic" type="button" onclick="location.href='/board/excel.eansoft'">엑셀 다운로드(전체)</button>
 	<c:url var="excelSearch" value="/board/excelSearch.eansoft?searchCondition=${search.searchCondition }&searchValue=${search.searchValue }"></c:url>
 	<button class="basic" type="button" onclick="document.execCommand('SaveAs'), location.href='${excelSearch}'">엑셀 다운로드(검색)</button>
+	<button class="basic" type="button" onclick="location.href='/board/statisticsView.eansoft'">통계 화면</button>
+	<button class="basic" type="button" onclick="location.href='/board/apiView.eansoft'">API 접속 기록</button>
 	
 	<!-- 기본 페이징 -->
 	<c:if test="${paging eq 'paging' }">
