@@ -387,4 +387,11 @@ public class BoardController {
 		return mv;
 	}
 	
+	// API 접속 기록
+	@RequestMapping(value="/board/apiView.eansoft", method=RequestMethod.GET)
+	public ModelAndView apiView(ModelAndView mv) {
+		mv.setViewName("board/boardApiView");
+		return mv;
+	}
+	
 }

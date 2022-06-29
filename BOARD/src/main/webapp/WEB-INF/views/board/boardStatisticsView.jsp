@@ -9,7 +9,7 @@
 	<button class="basic" type="button" onclick="prev();">이전</button>
 	<input type="date" id="startDate" value="2022-01-01">
 	<input type="date" id="endDate">
-	<button class="basic" type="button">조회</button>
+	<button class="basic" type="button" id="selectDate" onclick="selectDate();">조회</button>
 	<table class="table--basic" id="statisticsTable" style="width:60%; margin:auto;">
 		<thead>
 			<tr>
@@ -27,34 +27,90 @@
 			history.back();
 		}
 		
-		$(function() {
+		function selectDate() {
 			var startDate = $("#startDate").val();
 			var endDate = $("#endDate").val();
-			console.log(startDate);
-			console.log(endDate);
 			$.ajax({
-				url : "http://127.0.0.1:8888/statistics/count.hirp",
+// 				url : "http://127.0.0.1:8888/statistics/count.hirp",
+				url : "http://192.168.0.18:8888/board/statistic.hirp",
 				type : "get",
 				data : { "startDate" : startDate,
 						 "endDate" : endDate },
-				dataType : "json",
+				dataType : "jsonp",
+				jsonp : "callback",
 				success : function(data) {
-					var count = data.length;
-					var $tableBody = $("#statisticsTable tbody");
-					$tableBody.html("");
-					var $trCount = $("<tr>");
+					var $statisticTable = $("#statisticsTable tbody");
+					$statisticTable.html("");
+		               var $tr = $("<tr>");
+		               for (var i = 0; i < data.length; i++) {
+		                  var emplId = data[i].emplId;
+		                  var statisticCount = data[i].statisticCount;
+		                  var statisticData = "<tr>" + "<td>" + emplId
+		                        + "</td>" + "<td>" + statisticCount
+		                        + "</td>" + "</tr>"
+		                  $statisticTable.append(statisticData);
+		               }
+		               
+// 					var $tableBody = $("#statisticsTable tbody");
+// 					$tableBody.html("");
+// 					var $trCount = $("<tr>");
 					
-					$tableBody.append($trCount);
-					for(var i = 0; i < data.length; i++) {
-						var $tr = $("<tr>");
-						var $br = $("<br>");
-						var $projectManager = $("<td>").text(data[i].projectManager);
-						var $projectManagerCount = $("<td>").text(data[i].projectManagerCount);
+// 					$tableBody.append($trCount);
+// 					for(var i = 0; i < data.length; i++) {
+// 						var $tr = $("<tr>");
+// 						var $br = $("<br>");
+// 						var $projectManager = $("<td>").text(data[i].projectManager);
+// 						var $projectManagerCount = $("<td>").text(data[i].projectManagerCount);
 						
-						$tr.append($projectManager);
-						$tr.append($projectManagerCount);
-						$tableBody.append($tr);
-					}
+// 						$tr.append($projectManager);
+// 						$tr.append($projectManagerCount);
+// 						$tableBody.append($tr);
+// 					}
+				},
+				error : function() {
+					alert("Ajax 실패!");
+				}
+			});
+		}
+		
+		$(function() {
+			var startDate = $("#startDate").val();
+			var endDate = $("#endDate").val();
+			$.ajax({
+// 				url : "http://127.0.0.1:8888/statistics/count.hirp",
+				url : "http://192.168.0.18:8888/board/statistic.hirp",
+				type : "get",
+				data : { "startDate" : startDate,
+						 "endDate" : endDate },
+				dataType : "jsonp",
+				jsonp : "callback",
+				success : function(data) {
+					var $statisticTable = $("#statisticsTable tbody");
+		               var $tr = $("<tr>");
+		               for (var i = 0; i < data.length; i++) {
+		                  var emplId = data[i].emplId;
+		                  var statisticCount = data[i].statisticCount;
+		                  var statisticData = "<tr>" + "<td>" + emplId
+		                        + "</td>" + "<td>" + statisticCount
+		                        + "</td>" + "</tr>"
+		                  $statisticTable.append(statisticData);
+		               }
+
+// 					var $tableBody = $("#statisticsTable tbody");
+// 					$tableBody.html("");
+// 					var $trCount = $("<tr>");
+					
+// 					$tableBody.append($trCount);
+// 					for(var i = 0; i < data.length; i++) {
+// 						var $tr = $("<tr>");
+// 						var $br = $("<br>");
+// 						var $projectManager = $("<td>").text(data[i].projectManager);
+// 						var $projectManagerCount = $("<td>").text(data[i].projectManagerCount);
+						
+// 						$tr.append($projectManager);
+// 						$tr.append($projectManagerCount);
+// 						$tableBody.append($tr);
+// 					}
 				},
 				error : function() {
 					alert("Ajax 실패!");
