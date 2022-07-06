@@ -31,41 +31,42 @@
 			var startDate = $("#startDate").val();
 			var endDate = $("#endDate").val();
 			$.ajax({
-// 				url : "http://127.0.0.1:8888/statistics/count.hirp",
-				url : "http://192.168.0.18:8888/board/statistic.hirp",
+				url : "http://127.0.0.1:8888/statistics/count.hirp",
+// 				url : "http://192.168.0.18:8888/board/statistic.hirp",
 				type : "get",
 				data : { "startDate" : startDate,
 						 "endDate" : endDate },
 				dataType : "jsonp",
 				jsonp : "callback",
 				success : function(data) {
-					var $statisticTable = $("#statisticsTable tbody");
-					$statisticTable.html("");
-		               var $tr = $("<tr>");
-		               for (var i = 0; i < data.length; i++) {
-		                  var emplId = data[i].emplId;
-		                  var statisticCount = data[i].statisticCount;
-		                  var statisticData = "<tr>" + "<td>" + emplId
-		                        + "</td>" + "<td>" + statisticCount
-		                        + "</td>" + "</tr>"
-		                  $statisticTable.append(statisticData);
-		               }
-		               
-// 					var $tableBody = $("#statisticsTable tbody");
-// 					$tableBody.html("");
-// 					var $trCount = $("<tr>");
+// 					var $statisticTable = $("#statisticsTable tbody");
+// 					$statisticTable.html("");
+// 		               var $tr = $("<tr>");
+// 		               for (var i = 0; i < data.length; i++) {
+// 		                  var emplId = data[i].emplId;
+// 		                  var statisticCount = data[i].statisticCount;
+// 		                  var statisticData = "<tr>" + "<td>" + emplId
+// 		                        + "</td>" + "<td>" + statisticCount
+// 		                        + "</td>" + "</tr>"
+// 		                  $statisticTable.append(statisticData);
+// 		               }
+		            
+//		                      내 코드
+					var $tableBody = $("#statisticsTable tbody");
+					$tableBody.html("");
+					var $trCount = $("<tr>");
 					
-// 					$tableBody.append($trCount);
-// 					for(var i = 0; i < data.length; i++) {
-// 						var $tr = $("<tr>");
-// 						var $br = $("<br>");
-// 						var $projectManager = $("<td>").text(data[i].projectManager);
-// 						var $projectManagerCount = $("<td>").text(data[i].projectManagerCount);
+					$tableBody.append($trCount);
+					for(var i = 0; i < data.length; i++) {
+						var $tr = $("<tr>");
+						var $br = $("<br>");
+						var $projectManager = $("<td>").text(data[i].projectManager);
+						var $projectManagerCount = $("<td>").text(data[i].projectManagerCount);
 						
-// 						$tr.append($projectManager);
-// 						$tr.append($projectManagerCount);
-// 						$tableBody.append($tr);
-// 					}
+						$tr.append($projectManager);
+						$tr.append($projectManagerCount);
+						$tableBody.append($tr);
+					}
 				},
 				error : function() {
 					alert("Ajax 실패!");
@@ -77,40 +78,41 @@
 			var startDate = $("#startDate").val();
 			var endDate = $("#endDate").val();
 			$.ajax({
-// 				url : "http://127.0.0.1:8888/statistics/count.hirp",
-				url : "http://192.168.0.18:8888/board/statistic.hirp",
+				url : "http://127.0.0.1:8888/statistics/count.hirp",
+// 				url : "http://192.168.0.18:8888/board/statistic.hirp",
 				type : "get",
 				data : { "startDate" : startDate,
 						 "endDate" : endDate },
 				dataType : "jsonp",
 				jsonp : "callback",
 				success : function(data) {
-					var $statisticTable = $("#statisticsTable tbody");
-		               var $tr = $("<tr>");
-		               for (var i = 0; i < data.length; i++) {
-		                  var emplId = data[i].emplId;
-		                  var statisticCount = data[i].statisticCount;
-		                  var statisticData = "<tr>" + "<td>" + emplId
-		                        + "</td>" + "<td>" + statisticCount
-		                        + "</td>" + "</tr>"
-		                  $statisticTable.append(statisticData);
-		               }
+// 					var $statisticTable = $("#statisticsTable tbody");
+// 		               var $tr = $("<tr>");
+// 		               for (var i = 0; i < data.length; i++) {
+// 		                  var emplId = data[i].emplId;
+// 		                  var statisticCount = data[i].statisticCount;
+// 		                  var statisticData = "<tr>" + "<td>" + emplId
+// 		                        + "</td>" + "<td>" + statisticCount
+// 		                        + "</td>" + "</tr>"
+// 		                  $statisticTable.append(statisticData);
+// 		               }
 
-// 					var $tableBody = $("#statisticsTable tbody");
-// 					$tableBody.html("");
-// 					var $trCount = $("<tr>");
+// 		                      내 코드
+					var $tableBody = $("#statisticsTable tbody");
+					$tableBody.html("");
+					var $trCount = $("<tr>");
 					
-// 					$tableBody.append($trCount);
-// 					for(var i = 0; i < data.length; i++) {
-// 						var $tr = $("<tr>");
-// 						var $br = $("<br>");
-// 						var $projectManager = $("<td>").text(data[i].projectManager);
-// 						var $projectManagerCount = $("<td>").text(data[i].projectManagerCount);
+					$tableBody.append($trCount);
+					for(var i = 0; i < data.length; i++) {
+						var $tr = $("<tr>");
+						var $br = $("<br>");
+						var $projectManager = $("<td>").text(data[i].projectManager);
+						var $projectManagerCount = $("<td>").text(data[i].projectManagerCount);
 						
-// 						$tr.append($projectManager);
-// 						$tr.append($projectManagerCount);
-// 						$tableBody.append($tr);
-// 					}
+						$tr.append($projectManager);
+						$tr.append($projectManagerCount);
+						$tableBody.append($tr);
+					}
 				},
 				error : function() {
 					alert("Ajax 실패!");
