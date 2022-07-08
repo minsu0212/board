@@ -116,7 +116,7 @@
 											.append("<a href='javascript:void(0)' onclick='removeReply("+data[i].replyNo+", \""+data[i].emplId+"\");'>삭제</a>")
 
 							
-						var $btnReReply	 = $("<td class='t-c' width='100'>").append("<a href='javascript:void(0)' onclick='ReReplyWriteView(this, "+data[i].replyNo+", \""+data[i].replyContents+"\", \""+data[i].emplId+"\");'>답글</a>");
+						var $btnReReply	 = $("<td class='t-c' width='100'>").append("<a href='javascript:void(0)' onclick='ReReplyWriteView(this, "+data[i].replyNo+", \""+data[i].replyContents+"\");'>답글</a>");
 						
 						if(data[i].replyOrder == 0) {
 							$tr.append($rWriter);
@@ -212,8 +212,9 @@
 			});
 		}
 		
-		function ReReplyWriteView(obj, parentReplyNo, replyContents, emplId) {
+		function ReReplyWriteView(obj, parentReplyNo, replyContents) {
 			var loginId = "<%=(String)session.getAttribute("emplId")%>";
+			var emplId = "${board.emplId}";
 			if(loginId == emplId) {
 				var $trReReply = $("<tr>");
 				var $tdReReply = $("<td colspan='3'>");

@@ -6,12 +6,13 @@ import java.util.Calendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
-import com.eansoft.board.HomeController;
-
+import com.eansoft.board.board.controller.BoardController;
+@Component
 public class BatchScheduler {
 
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 	
 	@Scheduled(cron="0/2 * * * * *")
 	public void jobMethod() throws Exception {
