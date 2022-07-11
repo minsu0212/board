@@ -113,7 +113,7 @@ public class BoardController {
 	}
 	
 	// POI 엑셀 다운로드(전체)
-	@RequestMapping(value="/board/excel.eansoft", method=RequestMethod.GET)
+	@RequestMapping(value="/board/boardListApiView.eansoft", method=RequestMethod.GET)
 	public void downloadExcel(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		Workbook workbook = new HSSFWorkbook();
 		Sheet sheet = workbook.createSheet("게시판글들");
